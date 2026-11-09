@@ -23,7 +23,7 @@
     .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.card,.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:21px;box-shadow:0 2px 8px rgba(16,24,40,.025)}
     .card{transition:.18s}.card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--brand)}
     .ico{width:42px;height:42px;border-radius:12px;background:var(--soft);display:grid;place-items:center;color:var(--brand);font-size:21px;margin-bottom:14px}.card h3{margin:0 0 5px;font-size:18px}.card p{margin:0;color:var(--muted);font-size:14px}.tag{display:inline-block;margin-top:13px;color:var(--brand);font-size:12px;font-weight:750}
-    .feature{display:grid;grid-template-columns:1fr 1fr;gap:16px}textarea,input[type=date],input[type=number]{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--bg);color:var(--ink);font:inherit}textarea{min-height:125px;resize:vertical}
+    .feature{display:grid;grid-template-columns:1fr 1fr;gap:16px}textarea,input[type=date],input[type=number],select{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--bg);color:var(--ink);font:inherit}textarea{min-height:125px;resize:vertical}
     .stats{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-top:12px}.stats strong{color:var(--ink)}
     .fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.result{background:var(--soft);border-radius:11px;padding:13px;margin-top:13px;font-weight:700}
     footer{border-top:1px solid var(--line);padding:28px 0 36px;color:var(--muted);font-size:14px}.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}.hidden{display:none!important}
@@ -47,7 +47,7 @@
 <section class="section wrap" id="tools">
   <div class="sectionhead"><h2>Explore our tools</h2><p class="sub">Useful utilities, ready whenever you need them.</p></div>
   <div class="grid" id="toolgrid">
-    <a class="card" data-key="image resizer compressor resize jpg png" href="#quick"><div class="ico">▧</div><h3>Image Tools</h3><p>Resize and compress images for forms, websites and sharing.</p><span class="tag">Coming soon →</span></a>
+    <a class="card" data-key="image resizer compressor resize jpg png kb photo" href="#image-tool"><div class="ico">▧</div><h3>Image Resizer & Compressor</h3><p>Compress photos to 20 KB, 50 KB or 100 KB, right in your browser.</p><span class="tag">Use tool ↓</span></a>
     <a class="card" data-key="qr code generator wifi url" href="#quick"><div class="ico">▦</div><h3>QR Code Generator</h3><p>Create QR codes for links and Wi-Fi details.</p><span class="tag">Coming soon →</span></a>
     <a class="card" data-key="pdf merge split convert compress" href="#quick"><div class="ico">▤</div><h3>PDF Tools</h3><p>Merge and split PDF files directly in your browser.</p><span class="tag">Coming soon →</span></a>
     <a class="card" data-key="word character counter text" href="#quick"><div class="ico">T</div><h3>Text Counter</h3><p>Count words, characters and lines instantly.</p><span class="tag">Try it below ↓</span></a>
@@ -55,6 +55,36 @@
     <a class="card" data-key="emi loan calculator interest" href="#quick"><div class="ico">₹</div><h3>EMI Calculator</h3><p>Estimate monthly loan payments and total interest.</p><span class="tag">Try it below ↓</span></a>
   </div><p id="noresults" class="sub hidden">No matching tools. Try another search.</p>
 </section>
+
+<section class="section wrap" id="image-tool">
+  <div class="sectionhead"><h2>Image Resizer & Compressor</h2><p class="sub">Choose a photo and compress it to a target file size. Processing happens on your device; your image is not uploaded to our server.</p></div>
+  <div class="panel">
+    <label for="imagefile"><strong>Select an image</strong></label>
+    <input id="imagefile" type="file" accept="image/*" style="display:block;width:100%;margin:12px 0;padding:12px;border:1px dashed var(--line);border-radius:12px;background:var(--bg);color:var(--ink)">
+    <div class="fields" style="margin:14px 0">
+      <label>Target size
+        <select id="targetkb" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--bg);color:var(--ink);font:inherit">
+          <option value="20">20 KB</option><option value="50" selected>50 KB</option><option value="100">100 KB</option><option value="200">200 KB</option><option value="custom">Custom size</option>
+        </select>
+      </label>
+      <label id="customwrap" class="hidden">Custom target (KB)
+        <input id="customkb" type="number" min="5" max="5000" value="150">
+      </label>
+    </div>
+    <div id="imagepreviewwrap" class="hidden" style="margin:14px 0">
+      <img id="imagepreview" alt="Selected image preview" style="display:block;max-width:100%;max-height:280px;margin:auto;border-radius:12px;object-fit:contain">
+      <p class="sub" id="imageinfo" style="text-align:center"></p>
+    </div>
+    <button class="primary" id="compressbtn" disabled>Compress image</button>
+    <p class="sub" id="compressstatus" role="status" aria-live="polite">Select a JPG, PNG or WebP image to begin.</p>
+    <div id="downloadwrap" class="hidden result">
+      <strong id="downloadinfo"></strong>
+      <p style="margin:8px 0 0"><a id="downloadimage" class="btn primary" download="themaxtool-compressed.jpg">Download compressed image</a></p>
+    </div>
+    <p class="sub" style="font-size:13px;margin-top:14px">Note: Target size is an approximate maximum. If the selected image cannot reach the requested size at usable quality, the tool will tell you. The downloaded file is JPEG.</p>
+  </div>
+</section>
+
 <section class="section wrap" id="quick">
   <div class="sectionhead"><h2>Quick tools</h2><p class="sub">These tools work directly in your browser.</p></div>
   <div class="feature">
@@ -77,6 +107,64 @@ const tx=document.getElementById('textinput');tx.addEventListener('input',()=>{c
 document.getElementById('dob').addEventListener('change',e=>{const d=new Date(e.target.value+'T00:00:00'),now=new Date(),out=document.getElementById('ageresult');if(!e.target.value||d>now){out.textContent='Please choose a valid date in the past.';return}let y=now.getFullYear()-d.getFullYear(),m=now.getMonth()-d.getMonth(),day=now.getDate()-d.getDate();if(day<0){m--;day+=new Date(now.getFullYear(),now.getMonth(),0).getDate()}if(m<0){y--;m+=12}out.textContent=`${y} years, ${m} months, ${day} days`});
 document.getElementById('calcemi').addEventListener('click',()=>{const p=Number(document.getElementById('principal').value),r=Number(document.getElementById('rate').value)/1200,n=Number(document.getElementById('years').value)*12,out=document.getElementById('emiresult');if(!(p>0)||!(n>0)||r<0||!Number.isFinite(n)){out.textContent='Enter valid loan details.';return}const emi=r===0?p/n:p*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);out.textContent=`Monthly EMI: ₹${emi.toLocaleString('en-IN',{maximumFractionDigits:2})} · Total interest: ₹${(emi*n-p).toLocaleString('en-IN',{maximumFractionDigits:2})}`});
 document.getElementById('search').addEventListener('input',e=>{const q=e.target.value.toLowerCase().trim();let count=0;document.querySelectorAll('#toolgrid .card').forEach(c=>{const show=!q||(c.innerText+' '+c.dataset.key).toLowerCase().includes(q);c.classList.toggle('hidden',!show);if(show)count++});document.getElementById('noresults').classList.toggle('hidden',count>0)});
+
+const imageInput=document.getElementById('imagefile');
+const targetSelect=document.getElementById('targetkb');
+const customWrap=document.getElementById('customwrap');
+const compressBtn=document.getElementById('compressbtn');
+const statusEl=document.getElementById('compressstatus');
+const previewWrap=document.getElementById('imagepreviewwrap');
+const previewImg=document.getElementById('imagepreview');
+const imageInfo=document.getElementById('imageinfo');
+const downloadWrap=document.getElementById('downloadwrap');
+let selectedImage=null, previewUrl=null, outputUrl=null;
+targetSelect.addEventListener('change',()=>customWrap.classList.toggle('hidden',targetSelect.value!=='custom'));
+imageInput.addEventListener('change',()=>{
+  const file=imageInput.files&&imageInput.files[0];
+  downloadWrap.classList.add('hidden');
+  if(previewUrl)URL.revokeObjectURL(previewUrl);
+  if(outputUrl)URL.revokeObjectURL(outputUrl);
+  selectedImage=null;compressBtn.disabled=true;
+  if(!file){previewWrap.classList.add('hidden');statusEl.textContent='Select an image to begin.';return}
+  if(!file.type.startsWith('image/')){statusEl.textContent='Please select a valid image file.';return}
+  if(file.size>20*1024*1024){statusEl.textContent='Please choose an image smaller than 20 MB.';return}
+  const img=new Image();previewUrl=URL.createObjectURL(file);
+  img.onload=()=>{selectedImage=img;previewImg.src=previewUrl;previewWrap.classList.remove('hidden');compressBtn.disabled=false;imageInfo.textContent=`Original: ${(file.size/1024).toFixed(1)} KB · ${img.naturalWidth} × ${img.naturalHeight} px`;statusEl.textContent='Image ready. Choose a target size and compress.'};
+  img.onerror=()=>{statusEl.textContent='This image could not be opened. Try another file.'};
+  img.src=previewUrl;
+});
+compressBtn.addEventListener('click',async()=>{
+  if(!selectedImage)return;
+  let target=targetSelect.value==='custom'?Number(document.getElementById('customkb').value):Number(targetSelect.value);
+  if(!(target>=5&&target<=5000)){statusEl.textContent='Enter a target between 5 KB and 5000 KB.';return}
+  compressBtn.disabled=true;downloadWrap.classList.add('hidden');statusEl.textContent='Compressing…';
+  await new Promise(resolve=>setTimeout(resolve,30));
+  try{
+    const maxDim=2400,scale=Math.min(1,maxDim/Math.max(selectedImage.naturalWidth,selectedImage.naturalHeight));
+    const canvas=document.createElement('canvas');
+    canvas.width=Math.max(1,Math.round(selectedImage.naturalWidth*scale));
+    canvas.height=Math.max(1,Math.round(selectedImage.naturalHeight*scale));
+    const ctx=canvas.getContext('2d',{alpha:false});
+    ctx.fillStyle='#ffffff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(selectedImage,0,0,canvas.width,canvas.height);
+    const limit=target*1024;
+    const makeBlob=q=>new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',q));
+    let low=.08,high=.92,best=null;
+    for(let i=0;i<9;i++){
+      const q=(low+high)/2,blob=await makeBlob(q);
+      if(!blob)throw new Error('Your browser could not process this image.');
+      if(blob.size<=limit){best=blob;low=q}else{high=q}
+    }
+    if(!best){best=await makeBlob(.08)}
+    if(outputUrl)URL.revokeObjectURL(outputUrl);
+    outputUrl=URL.createObjectURL(best);
+    const link=document.getElementById('downloadimage');link.href=outputUrl;
+    document.getElementById('downloadinfo').textContent=`Compressed file: ${(best.size/1024).toFixed(1)} KB · ${canvas.width} × ${canvas.height} px`;
+    downloadWrap.classList.remove('hidden');
+    statusEl.textContent=best.size<=limit?'Done! Your image is within the selected target size.':'Could not reach the target size without reducing dimensions further. The best available result is ready below.';
+  }catch(err){statusEl.textContent=err.message||'Compression failed. Please try another image.'}
+  finally{compressBtn.disabled=false}
+});
+
 document.getElementById('year').textContent=new Date().getFullYear();
 </script>
 </body>
