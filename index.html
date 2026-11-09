@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8fafc">
+  <meta name="description" content="TheMaxTool brings together free, fast online tools for images, PDFs, QR codes, text and everyday calculations. No login required.">
+  <title>TheMaxTool — Free Online Tools for Everyone</title>
+  <link rel="canonical" href="https://themaxtool.com/">
+  <style>
+    :root{color-scheme:light;--bg:#f8fafc;--surface:#fff;--ink:#101828;--muted:#667085;--line:#e4e7ec;--brand:#2563eb;--soft:#eff6ff;--shadow:0 12px 35px rgba(16,24,40,.07)}
+    [data-theme="dark"]{color-scheme:dark;--bg:#0b1220;--surface:#111c2e;--ink:#f3f6fc;--muted:#a7b2c4;--line:#26364d;--brand:#60a5fa;--soft:#142844;--shadow:0 12px 35px rgba(0,0,0,.2)}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}.wrap{width:min(1100px,calc(100% - 36px));margin:auto}
+    header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+    .nav{height:70px;display:flex;align-items:center;justify-content:space-between;gap:16px}.logo{font-size:23px;font-weight:850;letter-spacing:-1px}.logo span{color:var(--brand)}
+    nav{display:flex;gap:24px;color:var(--muted);font-size:14px;font-weight:650}.actions{display:flex;gap:9px;align-items:center}
+    button,.btn{border:1px solid var(--line);border-radius:11px;padding:10px 14px;background:var(--surface);color:var(--ink);font:inherit;font-weight:650;cursor:pointer}.primary{background:var(--brand);border-color:var(--brand);color:white}
+    .hero{padding:76px 0 45px;text-align:center}.eyebrow{display:inline-block;padding:6px 12px;border:1px solid var(--line);border-radius:99px;background:var(--surface);color:var(--brand);font-size:13px;font-weight:750}
+    h1{font-size:clamp(38px,6vw,64px);line-height:1.06;letter-spacing:-2.5px;margin:22px auto 16px;max-width:850px}.hero p{color:var(--muted);font-size:18px;max-width:650px;margin:0 auto 26px}
+    .search{max-width:640px;margin:auto;display:flex;padding:7px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}.search input{min-width:0;flex:1;border:0;outline:0;background:transparent;color:var(--ink);padding:10px;font:inherit}
+    .section{padding:32px 0 52px}.sectionhead{margin-bottom:20px}.section h2{font-size:27px;letter-spacing:-.7px;margin:0}.sub{color:var(--muted);margin:5px 0 0}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.card,.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:21px;box-shadow:0 2px 8px rgba(16,24,40,.025)}
+    .card{transition:.18s}.card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--brand)}
+    .ico{width:42px;height:42px;border-radius:12px;background:var(--soft);display:grid;place-items:center;color:var(--brand);font-size:21px;margin-bottom:14px}.card h3{margin:0 0 5px;font-size:18px}.card p{margin:0;color:var(--muted);font-size:14px}.tag{display:inline-block;margin-top:13px;color:var(--brand);font-size:12px;font-weight:750}
+    .feature{display:grid;grid-template-columns:1fr 1fr;gap:16px}textarea,input[type=date],input[type=number]{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--bg);color:var(--ink);font:inherit}textarea{min-height:125px;resize:vertical}
+    .stats{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-top:12px}.stats strong{color:var(--ink)}
+    .fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.result{background:var(--soft);border-radius:11px;padding:13px;margin-top:13px;font-weight:700}
+    footer{border-top:1px solid var(--line);padding:28px 0 36px;color:var(--muted);font-size:14px}.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}.hidden{display:none!important}
+    @media(max-width:700px){nav{display:none}.hero{padding:55px 0 30px}.grid{grid-template-columns:1fr 1fr}.feature{grid-template-columns:1fr}}
+    @media(max-width:460px){.grid{grid-template-columns:1fr}.wrap{width:calc(100% - 28px)}h1{letter-spacing:-1.6px}.hero p{font-size:16px}}
+  </style>
+</head>
+<body>
+<header><div class="wrap nav">
+  <a class="logo" href="/">TheMax<span>Tool</span></a>
+  <nav><a href="#tools">All tools</a><a href="#quick">Quick tools</a><a href="#about">About</a></nav>
+  <div class="actions"><button id="theme" aria-label="Toggle dark mode">☾</button><a class="btn primary" href="#tools">Explore tools</a></div>
+</div></header>
+<main>
+<section class="hero wrap">
+  <span class="eyebrow">✦ Simple tools. Smarter everyday work.</span>
+  <h1>Every tool you need.<br><span style="color:var(--brand)">All in one place.</span></h1>
+  <p>Free, fast and easy-to-use online tools for your everyday tasks. No account. No hassle.</p>
+  <div class="search"><input id="search" type="search" placeholder="Search tools — PDF, image, QR, calculator..." aria-label="Search tools"><button class="primary" onclick="document.querySelector('#tools').scrollIntoView({behavior:'smooth'})">Search</button></div>
+</section>
+<section class="section wrap" id="tools">
+  <div class="sectionhead"><h2>Explore our tools</h2><p class="sub">Useful utilities, ready whenever you need them.</p></div>
+  <div class="grid" id="toolgrid">
+    <a class="card" data-key="image resizer compressor resize jpg png" href="#quick"><div class="ico">▧</div><h3>Image Tools</h3><p>Resize and compress images for forms, websites and sharing.</p><span class="tag">Coming soon →</span></a>
+    <a class="card" data-key="qr code generator wifi url" href="#quick"><div class="ico">▦</div><h3>QR Code Generator</h3><p>Create QR codes for links and Wi-Fi details.</p><span class="tag">Coming soon →</span></a>
+    <a class="card" data-key="pdf merge split convert compress" href="#quick"><div class="ico">▤</div><h3>PDF Tools</h3><p>Merge and split PDF files directly in your browser.</p><span class="tag">Coming soon →</span></a>
+    <a class="card" data-key="word character counter text" href="#quick"><div class="ico">T</div><h3>Text Counter</h3><p>Count words, characters and lines instantly.</p><span class="tag">Try it below ↓</span></a>
+    <a class="card" data-key="age calculator date birthday" href="#quick"><div class="ico">◷</div><h3>Age Calculator</h3><p>Calculate your age in years, months and days.</p><span class="tag">Try it below ↓</span></a>
+    <a class="card" data-key="emi loan calculator interest" href="#quick"><div class="ico">₹</div><h3>EMI Calculator</h3><p>Estimate monthly loan payments and total interest.</p><span class="tag">Try it below ↓</span></a>
+  </div><p id="noresults" class="sub hidden">No matching tools. Try another search.</p>
+</section>
+<section class="section wrap" id="quick">
+  <div class="sectionhead"><h2>Quick tools</h2><p class="sub">These tools work directly in your browser.</p></div>
+  <div class="feature">
+    <div class="panel"><h3>Word & Character Counter</h3><p class="sub">Type or paste text to count it instantly.</p><textarea id="textinput" placeholder="Start typing or paste your text here..."></textarea><div class="stats"><span>Words: <strong id="words">0</strong></span><span>Characters: <strong id="chars">0</strong></span><span>No spaces: <strong id="nospace">0</strong></span><span>Lines: <strong id="lines">0</strong></span></div></div>
+    <div class="panel"><h3>Age Calculator</h3><p class="sub">Choose your date of birth.</p><label for="dob">Date of birth</label><input id="dob" type="date"><div class="result" id="ageresult">Your age will appear here.</div>
+      <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
+      <h3>EMI Calculator</h3><p class="sub">Estimate your monthly instalment.</p>
+      <div class="fields"><label>Loan amount (₹)<input id="principal" type="number" min="1" placeholder="500000"></label><label>Annual interest (%)<input id="rate" type="number" min="0" step=".01" placeholder="10"></label><label>Tenure (years)<input id="years" type="number" min="1" max="50" placeholder="5"></label><button class="primary" id="calcemi" style="align-self:end">Calculate EMI</button></div><div class="result" id="emiresult">Your monthly EMI will appear here.</div>
+    </div>
+  </div>
+</section>
+<section class="section wrap" id="about"><div class="panel"><h2>Tools that make everyday tasks easier</h2><p class="sub">TheMaxTool brings practical online utilities together. Our goal is to keep essential tools free, simple and accessible on mobile and desktop.</p></div></section>
+</main>
+<footer><div class="wrap foot"><span>© <span id="year"></span> TheMaxTool. All rights reserved.</span><span>Free online tools for everyone</span></div></footer>
+<script>
+const root=document.documentElement,theme=document.getElementById('theme');
+theme.addEventListener('click',()=>{const dark=root.getAttribute('data-theme')!=='dark';root.setAttribute('data-theme',dark?'dark':'light');theme.textContent=dark?'☀':'☾';localStorage.setItem('tmt-theme',dark?'dark':'light')});
+if(localStorage.getItem('tmt-theme')==='dark'){root.setAttribute('data-theme','dark');theme.textContent='☀'}
+const tx=document.getElementById('textinput');tx.addEventListener('input',()=>{const v=tx.value;document.getElementById('words').textContent=(v.trim().match(/\S+/g)||[]).length;document.getElementById('chars').textContent=v.length;document.getElementById('nospace').textContent=v.replace(/\s/g,'').length;document.getElementById('lines').textContent=v.length?v.split(/\n/).length:0});
+document.getElementById('dob').addEventListener('change',e=>{const d=new Date(e.target.value+'T00:00:00'),now=new Date(),out=document.getElementById('ageresult');if(!e.target.value||d>now){out.textContent='Please choose a valid date in the past.';return}let y=now.getFullYear()-d.getFullYear(),m=now.getMonth()-d.getMonth(),day=now.getDate()-d.getDate();if(day<0){m--;day+=new Date(now.getFullYear(),now.getMonth(),0).getDate()}if(m<0){y--;m+=12}out.textContent=`${y} years, ${m} months, ${day} days`});
+document.getElementById('calcemi').addEventListener('click',()=>{const p=Number(document.getElementById('principal').value),r=Number(document.getElementById('rate').value)/1200,n=Number(document.getElementById('years').value)*12,out=document.getElementById('emiresult');if(!(p>0)||!(n>0)||r<0||!Number.isFinite(n)){out.textContent='Enter valid loan details.';return}const emi=r===0?p/n:p*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);out.textContent=`Monthly EMI: ₹${emi.toLocaleString('en-IN',{maximumFractionDigits:2})} · Total interest: ₹${(emi*n-p).toLocaleString('en-IN',{maximumFractionDigits:2})}`});
+document.getElementById('search').addEventListener('input',e=>{const q=e.target.value.toLowerCase().trim();let count=0;document.querySelectorAll('#toolgrid .card').forEach(c=>{const show=!q||(c.innerText+' '+c.dataset.key).toLowerCase().includes(q);c.classList.toggle('hidden',!show);if(show)count++});document.getElementById('noresults').classList.toggle('hidden',count>0)});
+document.getElementById('year').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
