@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Compress JPG, PNG and WebP images online with free 20KB, 50KB and 100KB target presets. Resize and download images in your browser with TheMaxTool.">
+<link rel="canonical" href="https://themaxtool.com/image-compressor.html">
+<title>Free Image Compressor to 20KB, 50KB, 100KB | TheMaxTool</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f7f8fc;color:#111827;font:16px/1.6 Arial,sans-serif}header,footer{background:#fff;border-bottom:1px solid #e5e7eb;padding:17px}.wrap{width:92%;max-width:850px;margin:auto}a{color:#4f46e5;text-decoration:none;font-weight:700}.hero{text-align:center;padding:38px 0 24px}h1{font-size:clamp(30px,5vw,44px);line-height:1.15}.muted{color:#667085}.panel{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:22px;box-shadow:0 8px 30px #0000000a}label{display:block;font-weight:600;margin:14px 0 7px}input,select{width:100%;padding:12px;border:1px solid #d9dce5;border-radius:9px;font-size:16px;background:#fff}button{padding:12px 18px;border:0;border-radius:10px;font-weight:700;cursor:pointer}.primary{background:linear-gradient(120deg,#4f46e5,#7c3aed);color:#fff}.secondary{background:#eef2ff;color:#4f46e5}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.result{display:none;margin-top:18px;padding:16px;background:#eef2ff;border-radius:12px}.result.show{display:block}img.preview{display:block;max-width:100%;max-height:260px;margin:12px auto;border-radius:10px}article{padding:22px 0}footer{margin-top:30px;color:#667085}@media(max-width:600px){.panel{padding:16px}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"TheMaxTool Image Compressor","url":"https://themaxtool.com/image-compressor.html","applicationCategory":"MultimediaApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}
+</script>
+</head>
+<body>
+<header><div class="wrap"><a href="/">TheMaxTool</a><span style="float:right"><a href="/">← All Tools</a></span></div></header>
+<main class="wrap">
+<section class="hero"><p style="color:#4f46e5;font-weight:bold">FREE ONLINE IMAGE TOOL</p><h1>Compress Image to 20KB, 50KB or 100KB</h1><p class="muted">Reduce image file size for forms, applications and websites. Choose a target size and download the compressed image.</p></section>
+<section class="panel">
+<label for="file">Choose an image (JPG, PNG or WebP)</label><input id="file" type="file" accept="image/jpeg,image/png,image/webp">
+<label for="target">Target file size</label><select id="target"><option value="20480">20 KB</option><option value="51200" selected>50 KB</option><option value="102400">100 KB</option><option value="204800">200 KB</option></select>
+<label for="format">Output format</label><select id="format"><option value="image/jpeg">JPG (recommended)</option><option value="image/webp">WebP</option><option value="image/png">PNG (may not reach target size)</option></select>
+<div class="actions"><button class="primary" id="compress">Compress Image</button><button class="secondary" id="reset">Reset</button></div>
+<div class="result" id="result" aria-live="polite"></div>
+<p class="muted" style="font-size:12px">Compression happens in this browser tab using the Canvas API. The selected image is not uploaded by this page. Actual output size depends on image dimensions and content; a target size cannot be guaranteed for every image.</p>
+</section>
+<article>
+<h2>How to compress an image online</h2><p>Select a JPG, PNG or WebP image, choose a target size such as 20KB, 50KB or 100KB, then press Compress Image. Download the result when it is ready.</p>
+<h2>When should you use an image compressor?</h2><p>Smaller images can help meet upload limits for online forms, reduce email attachment sizes and improve page loading. Always check the image dimensions and clarity required by the destination website before submitting it.</p>
+<h2>Frequently asked questions</h2>
+<h3>Is this image compressor free?</h3><p>Yes. The tool is free to use and does not require an account.</p>
+<h3>Can every image be compressed below 20KB?</h3><p>Not always. The final size depends on the original image, dimensions, format and visual complexity. The tool makes a best effort and reports the actual output size.</p>
+<h3>Are my images uploaded?</h3><p>This page processes the selected image in your browser and does not upload it to TheMaxTool's server.</p>
+<h2>Explore more free tools</h2><p><a href="/gst-calculator.html">GST Calculator</a> · <a href="/">Explore all tools on TheMaxTool</a></p>
+</article>
+</main>
+<footer><div class="wrap">© <span id="year"></span> TheMaxTool | <a href="/privacy.html">Privacy</a> | <a href="/disclaimer.html">Disclaimer</a> | <a href="/contact.html">Contact</a></div></footer>
+<script>
+const $=id=>document.getElementById(id);let sourceImage=null,outputUrl=null;
+$('year').textContent=new Date().getFullYear();
+$('file').addEventListener('change',()=>{sourceImage=null;if(outputUrl)URL.revokeObjectURL(outputUrl);outputUrl=null;$('result').classList.remove('show');const f=$('file').files[0];if(!f)return;if(!/^image\/(jpeg|png|webp)$/.test(f.type)){alert('Please choose a JPG, PNG or WebP image.');$('file').value='';return;}const img=new Image();img.onload=()=>sourceImage=img;img.onerror=()=>alert('Could not read this image.');img.src=URL.createObjectURL(f);});
+function blobFrom(canvas,type,q){return new Promise(resolve=>canvas.toBlob(resolve,type,q));}
+$('compress').addEventListener('click',async()=>{if(!sourceImage){alert('Please select an image first.');return;}const max=Number($('target').value),type=$('format').value;const canvas=document.createElement('canvas');let scale=Math.min(1,2400/Math.max(sourceImage.width,sourceImage.height));canvas.width=Math.max(1,Math.round(sourceImage.width*scale));canvas.height=Math.max(1,Math.round(sourceImage.height*scale));const ctx=canvas.getContext('2d');ctx.drawImage(sourceImage,0,0,canvas.width,canvas.height);let blob=await blobFrom(canvas,type,0.92);if(type!=='image/png'){for(let q=0.86;q>=0.18&&blob.size>max;q-=0.08)blob=await blobFrom(canvas,type,q);for(let pass=0;pass<5&&blob.size>max;pass++){canvas.width=Math.max(1,Math.round(canvas.width*0.85));canvas.height=Math.max(1,Math.round(canvas.height*0.85));ctx.drawImage(sourceImage,0,0,canvas.width,canvas.height);blob=await blobFrom(canvas,type,0.55);}}if(outputUrl)URL.revokeObjectURL(outputUrl);outputUrl=URL.createObjectURL(blob);const kb=(blob.size/1024).toFixed(1);const ext=type==='image/jpeg'?'jpg':type==='image/png'?'png':'webp';$('result').innerHTML='<strong>Compression complete</strong><p>Output size: '+kb+' KB '+(blob.size<=max?'(within target)':'(target not reached; this is the best-effort result)')+'</p><img class="preview" alt="Compressed image preview" src="'+outputUrl+'"><a class="primary" style="display:inline-block;padding:11px 16px;border-radius:9px;color:white" download="themaxtool-compressed.'+ext+'" href="'+outputUrl+'">Download image</a>'; $('result').classList.add('show');});
+$('reset').addEventListener('click',()=>{if(outputUrl)URL.revokeObjectURL(outputUrl);outputUrl=null;sourceImage=null;$('file').value='';$('target').value='51200';$('format').value='image/jpeg';$('result').classList.remove('show');$('result').innerHTML='';});
+</script>
+</body></html>
