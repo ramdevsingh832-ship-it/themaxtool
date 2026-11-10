@@ -1,0 +1,223 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Free GST Calculator India. Calculate GST inclusive and exclusive amounts, CGST, SGST, IGST and total invoice value online.">
+<link rel="canonical" href="https://themaxtool.com/gst-calculator.html">
+<title>GST Calculator India – CGST, SGST & IGST | TheMaxTool</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f7f8fc;color:#111827;font:16px/1.6 Arial,sans-serif}
+header,footer{background:white;border-bottom:1px solid #e5e7eb;padding:18px}
+.wrap{max-width:850px;width:92%;margin:auto}
+a{color:#4f46e5;text-decoration:none;font-weight:bold}
+.hero{text-align:center;padding:40px 0 25px}
+h1{font-size:clamp(30px,5vw,46px);line-height:1.15}
+.muted{color:#667085}
+.panel{background:white;border:1px solid #e5e7eb;border-radius:18px;padding:24px;box-shadow:0 8px 30px #0000000a}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:flex;flex-direction:column;gap:7px;font-weight:600;font-size:14px}
+input,select{width:100%;padding:12px;border:1px solid #d9dce5;border-radius:9px;font-size:16px;background:white}
+button{padding:12px 18px;border:0;border-radius:10px;font-weight:bold;cursor:pointer}
+.primary{background:linear-gradient(120deg,#4f46e5,#7c3aed);color:white}
+.secondary{background:#eef2ff;color:#4f46e5}
+.actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.result{display:none;background:#eef2ff;border-radius:12px;padding:18px;margin-top:20px}
+.result.show{display:block}
+.rows{display:grid;grid-template-columns:1fr auto;gap:10px}
+.rows strong{text-align:right}
+.total{border-top:1px solid #c7ceff;padding-top:12px;margin-top:8px;font-size:18px}
+article{padding:25px 0}
+h2{margin-top:28px}
+.faq{border-top:1px solid #e5e7eb;padding:12px 0}
+footer{margin-top:30px;color:#667085}
+@media(max-width:600px){.fields{grid-template-columns:1fr}.panel{padding:17px}}
+</style>
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"WebApplication",
+ "name":"TheMaxTool GST Calculator",
+ "url":"https://themaxtool.com/gst-calculator.html",
+ "applicationCategory":"FinanceApplication",
+ "operatingSystem":"Any",
+ "offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}
+}
+</script>
+</head>
+<body>
+<header>
+<div class="wrap">
+<a href="/">TheMaxTool</a>
+<span style="float:right"><a href="/">← All Tools</a></span>
+</div>
+</header>
+
+<main class="wrap">
+<section class="hero">
+<p style="color:#4f46e5;font-weight:bold">FREE ONLINE FINANCE TOOL</p>
+<h1>GST Calculator India</h1>
+<p class="muted">Calculate GST, CGST, SGST, IGST and final invoice amount instantly.</p>
+</section>
+
+<section class="panel">
+<div class="fields">
+<label>Amount (₹)
+<input id="amount" type="number" min="0" step="0.01" placeholder="Enter amount">
+</label>
+
+<label>GST Rate
+<select id="rate">
+<option value="0">0%</option>
+<option value="5">5%</option>
+<option value="12">12%</option>
+<option value="18" selected>18%</option>
+<option value="28">28%</option>
+<option value="custom">Custom Rate</option>
+</select>
+</label>
+
+<label id="customBox" hidden>Custom GST Rate (%)
+<input id="customRate" type="number" min="0" max="100" step="0.01">
+</label>
+
+<label>Supply Type
+<select id="supply">
+<option value="intra">Intra-state (CGST + SGST)</option>
+<option value="inter">Inter-state (IGST)</option>
+</select>
+</label>
+
+<label>Amount Type
+<select id="kind">
+<option value="exclusive">Amount Before GST</option>
+<option value="inclusive">Amount Including GST</option>
+</select>
+</label>
+</div>
+
+<div class="actions">
+<button class="primary" id="calculate">Calculate GST</button>
+<button class="secondary" id="reset">Reset</button>
+</div>
+
+<div class="result" id="result" aria-live="polite">
+<h2 style="margin-top:0">GST Breakdown</h2>
+<div class="rows" id="breakdown"></div>
+</div>
+<p class="muted" style="font-size:12px">For calculation support only. Verify the applicable GST rate and tax treatment for your transaction.</p>
+</section>
+
+<article>
+<h2>How to Calculate GST?</h2>
+<p>Enter your amount, select the applicable GST rate and choose whether the amount includes GST. The calculator displays the taxable value, tax amount and invoice total.</p>
+
+<h2>GST Calculation Formula</h2>
+<h3>Amount Before GST</h3>
+<p>GST = Taxable Value × GST Rate ÷ 100.</p>
+<p>Total Amount = Taxable Value + GST.</p>
+
+<h3>GST Inclusive Amount</h3>
+<p>Taxable Value = Inclusive Amount ÷ (1 + GST Rate ÷ 100).</p>
+<p>GST = Inclusive Amount − Taxable Value.</p>
+
+<h2>Difference Between CGST, SGST and IGST</h2>
+<p>CGST and SGST generally apply together to intra-state supplies. IGST generally applies to inter-state supplies. The correct tax treatment depends on the transaction and applicable place-of-supply rules.</p>
+
+<h2>Frequently Asked Questions</h2>
+<div class="faq">
+<h3>Is this GST calculator free?</h3>
+<p>Yes. You can use this calculator free of charge without signing in.</p>
+</div>
+<div class="faq">
+<h3>Can I calculate GST inclusive amounts?</h3>
+<p>Yes. Select Amount Including GST to calculate the taxable value and GST component.</p>
+</div>
+<div class="faq">
+<h3>Does this calculator file GST returns?</h3>
+<p>No. It only calculates an indicative GST breakdown. It does not file returns or make tax payments.</p>
+</div>
+
+<h2>Explore More Free Tools</h2>
+<p><a href="/">Explore EMI, SIP, PDF, Image and other tools on TheMaxTool →</a></p>
+</article>
+</main>
+
+<footer>
+<div class="wrap">
+© <span id="year"></span> TheMaxTool |
+<a href="/privacy.html">Privacy</a> |
+<a href="/disclaimer.html">Disclaimer</a> |
+<a href="/contact.html">Contact</a>
+</div>
+</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const money=n=>'₹'+n.toLocaleString('en-IN',{
+ minimumFractionDigits:2,
+ maximumFractionDigits:2
+});
+
+$('year').textContent=new Date().getFullYear();
+
+$('rate').addEventListener('change',()=>{
+ $('customBox').hidden=$('rate').value!=='custom';
+});
+
+$('calculate').addEventListener('click',()=>{
+ const amount=Number($('amount').value);
+ const rate=$('rate').value==='custom'
+  ?Number($('customRate').value)
+  :Number($('rate').value);
+
+ if($('amount').value==='' || !Number.isFinite(amount) ||
+ amount<0 || !Number.isFinite(rate) || rate<0 || rate>100){
+  alert('Please enter a valid amount and GST rate.');
+  return;
+ }
+
+ const r=rate/100;
+ const inclusive=$('kind').value==='inclusive';
+ const taxable=inclusive?amount/(1+r):amount;
+ const tax=inclusive?amount-taxable:taxable*r;
+ const intra=$('supply').value==='intra';
+
+ const lines=[
+  ['Taxable Value',money(taxable)],
+  ['GST Rate',rate.toFixed(2)+'%']
+ ];
+
+ if(intra){
+  lines.push(['CGST',money(tax/2)]);
+  lines.push(['SGST',money(tax/2)]);
+ }else{
+  lines.push(['IGST',money(tax)]);
+ }
+
+ lines.push(['Total GST',money(tax)]);
+ lines.push(['Invoice Total',money(inclusive?amount:taxable+tax)]);
+
+ $('breakdown').innerHTML=lines.map((x,i)=>
+  '<span class="'+(i===lines.length-1?'total':'')+'">'+x[0]+
+  '</span><strong class="'+(i===lines.length-1?'total':'')+'">'+
+  x[1]+'</strong>'
+ ).join('');
+
+ $('result').classList.add('show');
+});
+
+$('reset').addEventListener('click',()=>{
+ $('amount').value='';
+ $('rate').value='18';
+ $('customRate').value='';
+ $('customBox').hidden=true;
+ $('supply').value='intra';
+ $('kind').value='exclusive';
+ $('result').classList.remove('show');
+});
+</script>
+</body>
+</html>
