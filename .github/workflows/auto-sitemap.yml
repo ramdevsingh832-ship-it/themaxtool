@@ -1,0 +1,66 @@
+name: Automatically update sitemap
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '*.html'
+      - 'sitemap.xml'
+      - '.github/workflows/auto-sitemap.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-sitemap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Generate sitemap from website pages
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from datetime import date
+          from xml.etree.ElementTree import Element, SubElement, ElementTree, register_namespace
+
+          domain = "https://themaxtool.com"
+          register_namespace("", "http://www.sitemaps.org/schemas/sitemap/0.9")
+          ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+          root = Element(ns + "urlset")
+          today = date.today().isoformat()
+
+          pages = sorted(
+              p for p in Path(".").glob("*.html")
+              if p.is_file() and not p.name.startswith("_")
+          )
+          pages.sort(key=lambda p: (p.name != "index.html", p.name.lower()))
+
+          for page in pages:
+              item = SubElement(root, ns + "url")
+              loc = SubElement(item, ns + "loc")
+              loc.text = domain + ("/" if page.name == "index.html" else "/" + page.name)
+              lastmod = SubElement(item, ns + "lastmod")
+              lastmod.text = today
+              if page.name == "index.html":
+                  priority = SubElement(item, ns + "priority")
+                  priority.text = "1.0"
+
+          ElementTree(root).write("sitemap.xml", encoding="UTF-8", xml_declaration=True)
+          print(f"Generated sitemap with {len(pages)} HTML pages.")
+          PY
+
+      - name: Commit sitemap when changed
+        run: |
+          if git diff --quiet -- sitemap.xml; then
+            echo "Sitemap is already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sitemap.xml
+          git commit -m "Automatically update sitemap"
+          git push
