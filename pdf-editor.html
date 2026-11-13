@@ -5,8 +5,8 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-NHPCFLSH9M');</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Free Unlimited PDF Editor Online — Add Text, Sign & Whiteout | TheMaxTool</title>
-<meta name="description" content="Edit PDF files online for free with unlimited tasks. Add text, insert signature or stamp, whiteout text, and highlight pages directly in your browser.">
+<title>Free Unlimited PDF Editor Online — Edit Existing Text, Sign & Whiteout | TheMaxTool</title>
+<meta name="description" content="Edit existing text inside PDF files online for free with unlimited tasks. Click any text to edit, add signature or stamp, whiteout, and highlight directly in your browser.">
 <link rel="canonical" href="https://themaxtool.com/pdf-editor.html">
 <link rel="icon" type="image/svg+xml" href="/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,20 +37,25 @@
   .upload-btn{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;border:none;padding:14px 28px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin-top:16px}
   /* Interactive PDF Stage */
   .stage-wrap{flex:1;overflow:auto;padding:24px 16px;display:flex;flex-direction:column;align-items:center}
-  .page-stage{position:relative;background:#fff;box-shadow:0 14px 36px rgba(15,23,42,.15);border:1px solid #cbd5e1;user-select:none;cursor:crosshair}
+  .page-stage{position:relative;background:#fff;box-shadow:0 14px 36px rgba(15,23,42,.15);border:1px solid #cbd5e1;user-select:none;cursor:text}
   canvas#pdfCanvas{display:block}
-  .overlay-layer{position:absolute;inset:0;overflow:hidden}
-  .el-item{position:absolute;cursor:move;border:1.5px dashed transparent;padding:2px 4px;line-height:1.2}
+  .text-detect-layer,.overlay-layer{position:absolute;inset:0;overflow:hidden}
+  /* Detected Existing PDF Text Blocks */
+  .pdf-detected{position:absolute;border:1px dashed rgba(79,70,229,0.28);border-radius:3px;cursor:text;transition:.12s;background:transparent}
+  .pdf-detected:hover{border-color:#4f46e5;background:rgba(79,70,229,0.10)}
+  /* Editable Items */
+  .el-item{position:absolute;cursor:move;border:1.5px dashed transparent;padding:1px 3px;line-height:1.15}
   .el-item:hover,.el-item.selected{border-color:var(--blue);background:rgba(79,70,229,.06)}
-  .el-text{outline:none;min-width:40px;white-space:pre-wrap;font-family:Helvetica,Arial,sans-serif;font-weight:600}
-  .el-del{position:absolute;top:-11px;right:-11px;width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;border:none;font-size:11px;font-weight:800;display:none;place-items:center;cursor:pointer}
+  .el-item.replaced-text{background:#ffffff;box-shadow:0 0 0 2px #ffffff}
+  .el-text{outline:none;min-width:24px;white-space:pre-wrap;font-family:Helvetica,Arial,sans-serif;font-weight:500;cursor:text}
+  .el-del{position:absolute;top:-11px;right:-11px;width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;border:none;font-size:11px;font-weight:800;display:none;place-items:center;cursor:pointer;z-index:5}
   .el-item:hover .el-del,.el-item.selected .el-del{display:grid}
   .el-whiteout{background:#ffffff;border:1px solid #cbd5e1}
   .el-highlight{background:rgba(250,204,21,0.42)}
   .el-img img{width:100%;height:100%;object-fit:contain;pointer-events:none;display:block}
   .resize-handle{position:absolute;right:-5px;bottom:-5px;width:11px;height:11px;background:var(--blue);border-radius:50%;cursor:nwse-resize;display:none}
   .el-item:hover .resize-handle,.el-item.selected .resize-handle{display:block}
-  .hint-bar{background:#eef2ff;color:var(--blue);font-size:12px;font-weight:600;padding:6px 14px;border-radius:99px;margin-bottom:14px}
+  .hint-bar{background:#eef2ff;color:var(--blue);font-size:12px;font-weight:600;padding:7px 15px;border-radius:99px;margin-bottom:14px;text-align:center}
   .hidden{display:none!important}
   footer{background:#fff;border-top:1px solid var(--line);padding:16px 20px;text-align:center;font-size:12px;color:var(--muted)}
 </style>
@@ -60,20 +65,20 @@
 <header>
   <a class="logo" href="/"><img src="/logo.svg" width="32" height="32" style="border-radius:8px" alt="Logo">TheMax<span>Tool</span></a>
   <div style="display:flex;align-items:center;gap:10px">
-    <span class="badge">✓ 100% UNLIMITED • NO FILE LIMITS</span>
+    <span class="badge">✓ 100% UNLIMITED • CLICK ANY TEXT TO EDIT</span>
     <a href="/" class="tbtn" style="text-decoration:none">← All Tools</a>
   </div>
 </header>
 
 <!-- Sejda-Style Toolbar -->
 <div class="toolbar hidden" id="toolbar">
-  <button class="tbtn active" data-mode="text" id="btnText"><span>T</span> Add Text</button>
+  <button class="tbtn active" data-mode="text" id="btnText"><span>T</span> Edit / Add Text</button>
   <button class="tbtn" id="btnSign"><span>✍️</span> Add Sign / Image</button>
   <input type="file" id="signInput" accept="image/*" class="hidden">
   <button class="tbtn" data-mode="whiteout" id="btnWhite"><span>⬜</span> Whiteout</button>
   <button class="tbtn" data-mode="highlight" id="btnHigh"><span>🖍️</span> Highlight</button>
   <div class="sep"></div>
-  <label class="ctrl-group">Size <input type="number" id="fontSize" value="16" min="8" max="72"></label>
+  <label class="ctrl-group">Size <input type="number" id="fontSize" value="15" min="8" max="72"></label>
   <label class="ctrl-group">Color <input type="color" id="fontColor" value="#111827"></label>
   <div class="sep"></div>
   <button class="tbtn" id="prevPage">◀</button>
@@ -87,7 +92,7 @@
 <div class="upload-wrap" id="uploadBox">
   <div style="font-size:44px;margin-bottom:10px">📄</div>
   <h1 style="margin:0 0 8px;font-size:26px">Free Unlimited Online PDF Editor</h1>
-  <p style="color:var(--muted);margin:0 auto;max-width:440px">Click anywhere on your PDF to add text, insert your signature or stamp, whiteout mistakes, and highlight text. Runs 100% locally in your browser.</p>
+  <p style="color:var(--muted);margin:0 auto;max-width:460px">Click directly on <b>existing PDF text</b> to edit or delete it, add new text, insert your signature or stamp, and whiteout mistakes. 100% free &amp; private.</p>
   <input type="file" id="pdfUpload" accept="application/pdf" class="hidden">
   <button class="upload-btn" onclick="document.getElementById('pdfUpload').click()">Choose PDF File</button>
   <div style="margin-top:16px;font-size:12px;color:var(--muted)">🔒 Private &amp; Secure • Files never leave your computer</div>
@@ -95,9 +100,10 @@
 
 <!-- Interactive Editor Stage -->
 <div class="stage-wrap hidden" id="editorStage">
-  <div class="hint-bar" id="modeHint">💡 Mode: <b>Add Text</b> — Click anywhere on the PDF page below to type text, or drag items to reposition.</div>
+  <div class="hint-bar" id="modeHint">💡 <b>Tip:</b> Click on any <b>existing text</b> inside the PDF to edit it directly, or click empty space to add new text.</div>
   <div class="page-stage" id="pageStage">
     <canvas id="pdfCanvas"></canvas>
+    <div class="text-detect-layer" id="textDetectLayer"></div>
     <div class="overlay-layer" id="overlayLayer"></div>
   </div>
 </div>
@@ -108,12 +114,13 @@
 document.getElementById('yr').textContent = new Date().getFullYear();
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-let rawPdfBytes = null, pdfJsDoc = null, currentPage = 1, totalPages = 1, scale = 1.35;
-let mode = 'text', items = [], selectedId = null;
+let rawPdfBytes = null, pdfJsDoc = null, currentPage = 1, totalPages = 1, scale = 1.4;
+let mode = 'text', items = [], selectedId = null, detectedBlocks = [];
 
 const pdfUpload = document.getElementById('pdfUpload');
 const canvas = document.getElementById('pdfCanvas');
 const ctx = canvas.getContext('2d');
+const detectLayer = document.getElementById('textDetectLayer');
 const overlay = document.getElementById('overlayLayer');
 
 // Mode switching
@@ -123,9 +130,9 @@ document.querySelectorAll('[data-mode]').forEach(btn => {
     btn.classList.add('active');
     mode = btn.dataset.mode;
     const hints = {
-      text: '💡 Mode: <b>Add Text</b> — Click anywhere on the PDF page to insert editable text.',
-      whiteout: '💡 Mode: <b>Whiteout</b> — Click on the page to place a white cover box, then drag corner to resize.',
-      highlight: '💡 Mode: <b>Highlight</b> — Click on the page to place a yellow highlight strip, then drag corner to resize.'
+      text: '💡 <b>Edit / Add Text:</b> Click any existing text box on the PDF to edit it, or click empty area to write new text.',
+      whiteout: '💡 <b>Whiteout:</b> Click anywhere on the page to place a white cover box, then drag its corner to resize.',
+      highlight: '💡 <b>Highlight:</b> Click anywhere on the page to place a yellow highlight bar, then drag its corner to resize.'
     };
     document.getElementById('modeHint').innerHTML = hints[mode];
   };
@@ -168,26 +175,95 @@ async function renderPage() {
   document.getElementById('pageStage').style.width = viewport.width + 'px';
   document.getElementById('pageStage').style.height = viewport.height + 'px';
   document.getElementById('pageIndicator').textContent = `Page ${currentPage} / ${totalPages}`;
+
   await page.render({ canvasContext: ctx, viewport }).promise;
+  await extractClickableText(page, viewport);
   renderOverlay();
+}
+
+// Extract existing text positions from PDF so user can click & edit any word/line
+async function extractClickableText(page, viewport) {
+  detectLayer.innerHTML = '';
+  detectedBlocks = [];
+  const textContent = await page.getTextContent();
+
+  textContent.items.forEach((item, idx) => {
+    if (!item.str || !item.str.trim()) return;
+    const tx = pdfjsLib.Util.transform(viewport.transform, item.transform);
+    const fontHeight = Math.hypot(tx[2], tx[3]);
+    const width = item.width * scale;
+    const x = tx[4];
+    const y = tx[5] - fontHeight;
+
+    const blockId = `p${currentPage}_t${idx}`;
+    detectedBlocks.push({ blockId, str: item.str, x, y, w: Math.max(width, 20), h: fontHeight * 1.18, fontSize: Math.round(fontHeight) });
+
+    // Skip if user already converted this block into an edited item
+    if (items.some(it => it.sourceBlockId === blockId)) return;
+
+    const box = document.createElement('div');
+    box.className = 'pdf-detected';
+    box.title = 'Click to edit: ' + item.str;
+    box.style.left = x + 'px';
+    box.style.top = y + 'px';
+    box.style.width = Math.max(width + 4, 22) + 'px';
+    box.style.height = (fontHeight * 1.2) + 'px';
+
+    box.onclick = ev => {
+      ev.stopPropagation();
+      const newId = Date.now() + idx;
+      items.push({
+        id: newId,
+        sourceBlockId: blockId,
+        page: currentPage,
+        type: 'text',
+        isReplacement: true,
+        origX: x - 2,
+        origY: y - 1,
+        origW: Math.max(width + 8, 28),
+        origH: fontHeight * 1.25,
+        x: x - 2,
+        y: y - 1,
+        text: item.str,
+        size: Math.max(10, Math.round(fontHeight)),
+        color: document.getElementById('fontColor').value
+      });
+      selectedId = newId;
+      document.getElementById('fontSize').value = Math.max(10, Math.round(fontHeight));
+      box.remove();
+      renderOverlay();
+      setTimeout(() => {
+        const el = document.querySelector(`[data-id="${newId}"] .el-text`);
+        if (el) { el.focus(); document.execCommand('selectAll', false, null); }
+      }, 20);
+    };
+    detectLayer.appendChild(box);
+  });
 }
 
 document.getElementById('prevPage').onclick = () => { if (currentPage > 1) { currentPage--; renderPage(); } };
 document.getElementById('nextPage').onclick = () => { if (currentPage < totalPages) { currentPage++; renderPage(); } };
 
-// Click on PDF page to place new element
+// Click empty space on PDF page to place new element
 overlay.addEventListener('mousedown', e => {
   if (e.target !== overlay) return;
   const rect = overlay.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
 
+  // Check if user clicked on an underlying detected text block
+  const hit = detectedBlocks.find(b => x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h && !items.some(it => it.sourceBlockId === b.blockId));
+  if (hit && mode === 'text') {
+    const targetEl = [...detectLayer.children].find(el => el.title === 'Click to edit: ' + hit.str && Math.abs(parseFloat(el.style.left) - hit.x) < 2);
+    if (targetEl) { targetEl.click(); return; }
+  }
+
   if (mode === 'text') {
     const id = Date.now();
     items.push({
-      id, page: currentPage, type: 'text',
+      id, page: currentPage, type: 'text', isReplacement: false,
       x, y: y - 10, text: 'Type here',
-      size: Number(document.getElementById('fontSize').value) || 16,
+      size: Number(document.getElementById('fontSize').value) || 15,
       color: document.getElementById('fontColor').value
     });
     selectedId = id;
@@ -210,7 +286,7 @@ overlay.addEventListener('mousedown', e => {
 // Live update selected text size/color
 document.getElementById('fontSize').oninput = e => {
   const it = items.find(i => i.id === selectedId && i.type === 'text');
-  if (it) { it.size = Number(e.target.value) || 16; renderOverlay(); }
+  if (it) { it.size = Number(e.target.value) || 15; renderOverlay(); }
 };
 document.getElementById('fontColor').oninput = e => {
   const it = items.find(i => i.id === selectedId && i.type === 'text');
@@ -221,7 +297,7 @@ function renderOverlay() {
   overlay.innerHTML = '';
   items.filter(i => i.page === currentPage).forEach(it => {
     const wrap = document.createElement('div');
-    wrap.className = 'el-item' + (it.id === selectedId ? ' selected' : '');
+    wrap.className = 'el-item' + (it.id === selectedId ? ' selected' : '') + (it.isReplacement ? ' replaced-text' : '');
     wrap.dataset.id = it.id;
     wrap.style.left = it.x + 'px';
     wrap.style.top = it.y + 'px';
@@ -252,7 +328,11 @@ function renderOverlay() {
     const del = document.createElement('button');
     del.className = 'el-del';
     del.textContent = '×';
-    del.onclick = ev => { ev.stopPropagation(); items = items.filter(x => x.id !== it.id); renderOverlay(); };
+    del.onclick = ev => {
+      ev.stopPropagation();
+      items = items.filter(x => x.id !== it.id);
+      renderPage();
+    };
     wrap.appendChild(del);
 
     makeDraggable(wrap, it);
@@ -307,7 +387,7 @@ document.getElementById('applySaveBtn').onclick = async () => {
   btn.textContent = '⏳ Saving PDF...';
   try {
     const pdfDoc = await PDFLib.PDFDocument.load(rawPdfBytes);
-    const font = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+    const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
 
     for (const it of items) {
       const page = pdfDoc.getPage(it.page - 1);
@@ -316,14 +396,26 @@ document.getElementById('applySaveBtn').onclick = async () => {
       const ratioY = height / canvas.height;
 
       if (it.type === 'text') {
+        // If replacing existing PDF text, cover original text area with white box first
+        if (it.isReplacement) {
+          page.drawRectangle({
+            x: it.origX * ratioX,
+            y: height - ((it.origY + it.origH) * ratioY),
+            width: it.origW * ratioX,
+            height: it.origH * ratioY,
+            color: PDFLib.rgb(1, 1, 1)
+          });
+        }
         const fontSizePdf = it.size * ratioY;
-        page.drawText(it.text || '', {
-          x: (it.x + 4) * ratioX,
-          y: height - ((it.y + it.size) * ratioY),
-          size: fontSizePdf,
-          font,
-          color: hexToRgb(it.color || '#111827')
-        });
+        if ((it.text || '').trim()) {
+          page.drawText(it.text, {
+            x: (it.x + 2) * ratioX,
+            y: height - ((it.y + it.size * 0.92) * ratioY),
+            size: fontSizePdf,
+            font,
+            color: hexToRgb(it.color || '#111827')
+          });
+        }
       } else if (it.type === 'whiteout') {
         page.drawRectangle({
           x: it.x * ratioX,
