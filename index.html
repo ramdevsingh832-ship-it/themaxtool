@@ -163,7 +163,7 @@ function fileinput(l,id,m=false,a='.pdf'){return `<label class="field full">${l}
   recent=[id,...recent.filter(x=>x!==id)].slice(0,5);localStorage.setItem('tmt-recent',JSON.stringify(recent));
   render();$('tooltitle').textContent=t[0];$('tooldesc').textContent=t[3];
   const fp=$('fullPageBtn');if(t[5]){fp.href=t[5];fp.classList.remove('hidden')}else fp.classList.add('hidden');
-  history.replaceState(null,'',`?tool=${id}`);$('toolarea').classList.add('open');
+  history.replaceState(null,'',`?tool=${id}`);$('toolarea').classList.add('open');if(window.gtag)gtag('event','tool_opened',{tool_name:id});
 
   if(['gst','emi','sip','fd','rd','salary','profit','attendance','cgpa','percent','age','unit','wordsnum'].includes(id)){
     const F={
@@ -186,18 +186,23 @@ function fileinput(l,id,m=false,a='.pdf'){return `<label class="field full">${l}
     $('copyBtn').onclick=()=>navigator.clipboard.writeText($('liveStats').innerText);
     calcLive(id);
   }
-  else if(['compress','passport','signature','resize','convert'].includes(id)){
+    else if(['compress','passport','signature','resize','convert'].includes(id)){
+    const presets=id==='compress'?`<div class="chips" style="justify-content:flex-start;margin:0 0 10px"><button type="button" class="chip" data-pre="kb:45,q:75">SSC / Exam Photo (45 KB)</button><button type="button" class="chip" data-pre="kb:20,q:60">Strict 20 KB</button><button type="button" class="chip" data-pre="kb:95,q:85">100 KB Form</button></div>`
+      :id==='signature'?`<div class="chips" style="justify-content:flex-start;margin:0 0 10px"><button type="button" class="chip" data-pre="w:140,h:60">SSC Sign (140×60)</button><button type="button" class="chip" data-pre="w:300,h:100">UPSC / Bank (300×100)</button><button type="button" class="chip" data-pre="w:400,h:200">PAN Card Sign (400×200)</button></div>`
+      :id==='resize'?`<div class="chips" style="justify-content:flex-start;margin:0 0 10px"><button type="button" class="chip" data-pre="w:213,h:213">PAN Photo (213×213)</button><button type="button" class="chip" data-pre="w:413,h:531">Passport (413×531)</button><button type="button" class="chip" data-pre="w:1080,h:1080">Square (1080×1080)</button></div>`:'';
     const extra=id==='compress'?`${fld('Target Max KB','kb','number','20')}<label class="field">Quality: <span id="qVal">75%</span><input id="qrange" type="range" min="10" max="95" value="75"></label>`
       :id==='passport'?`${sel('Mode / Paper','sheet',['Single Photo (Online Form)','4x6 Inch (Print Sheet)','A4 Paper (Print Sheet)'])}${sel('Photos on Sheet','copies',['1','6','8','12','15','20','30'])}${fld('Name & Date on Photo (Optional)','ptext','text','','placeholder="e.g. RAHUL • 13-11-2026"')}${sel('Cutting Border','border',['No','Yes'])}`
       :id==='signature'?`${fld('Width (px)','w','number','300')}${fld('Height (px)','h','number','100')}${sel('Background','bg',['White','Transparent'])}`
       :id==='resize'?`${fld('Width (px)','w','number','800')}${fld('Height (px)','h','number','800')}`
       :sel('Output Format','format',['image/jpeg','image/png']);
-    $('toolbody').innerHTML=`<div class="split-work"><div class="work-box"><div class="box-label">1. Input &amp; Settings</div><div class="fields">${fileinput('1. Choose Image (JPG, PNG, WebP)','file',false,'image/*')}${extra}</div><div class="tool-actions"><button class="success-btn hidden" id="dlImgBtn">⬇ Download Ready Image</button></div></div><div class="work-box"><div class="box-label">2. Live Preview</div><div class="compare-grid"><div class="img-slot"><div class="box-label">Before <span class="meta-badge" id="origMeta">—</span></div><img id="origPreview" class="hidden" alt="Original"><div id="origEmpty" class="muted" style="padding:36px 0;font-size:12px">Select an image</div></div><div class="img-slot"><div class="box-label">After (Live) <span class="meta-badge saved" id="outMeta">—</span></div><img id="outPreview" class="hidden" alt="Processed"><div id="outEmpty" class="muted" style="padding:36px 0;font-size:12px">Result appears here</div></div></div></div></div>`;
+    $('toolbody').innerHTML=`<div class="split-work"><div class="work-box"><div class="box-label">1. Input &amp; Settings</div>${presets}<div class="fields">${fileinput('1. Choose Image (JPG, PNG, WebP)','file',false,'image/*')}${extra}</div><div class="tool-actions"><button class="success-btn hidden" id="dlImgBtn">⬇ Download Ready Image</button></div></div><div class="work-box"><div class="box-label">2. Live Preview</div><div class="compare-grid"><div class="img-slot"><div class="box-label">Before <span class="meta-badge" id="origMeta">—</span></div><img id="origPreview" class="hidden" alt="Original"><div id="origEmpty" class="muted" style="padding:36px 0;font-size:12px">Select an image</div></div><div class="img-slot"><div class="box-label">After (Live) <span class="meta-badge saved" id="outMeta">—</span></div><img id="outPreview" class="hidden" alt="Processed"><div id="outEmpty" class="muted" style="padding:36px 0;font-size:12px">Result appears here</div></div></div></div></div>`;
+    $('toolbody').querySelectorAll('[data-pre]').forEach(b=>b.onclick=()=>{b.dataset.pre.split(',').forEach(kv=>{const[k,v]=kv.split(':');if(k==='q'){$('qrange').value=v;$('qVal').textContent=v+'%'}else if($(k))$(k).value=v});if($('file').files[0])imgLive(id)});
     $('file').onchange=()=>imgLive(id);
     $('toolbody').oninput=e=>{if(e.target.id==='qrange')$('qVal').textContent=e.target.value+'%';if($('file').files[0])imgLive(id)};
     $('toolbody').onchange=e=>{if(e.target.id!=='file'&&$('file').files[0])imgLive(id)};
-    $('dlImgBtn').onclick=()=>{if(latestBlob)dl(latestBlob,latestFilename)};
-  }
+    $('dlImgBtn').onclick=()=>{if(latestBlob){dl(latestBlob,latestFilename);if(window.gtag)gtag('event','file_downloaded',{tool_name:id})}};
+    }
+      
   else if(['pdfmerge','pdfsplit','pdfrotate','pdftojpg','imgtopdf'].includes(id)){
     const multi=id==='pdfmerge'||id==='imgtopdf',acc=id==='imgtopdf'?'image/*':'.pdf';
     const opt=id==='pdfsplit'?fld('Pages (e.g. 1,3-5)','pages','text','1'):id==='pdfrotate'?sel('Rotate Angle','deg',['90','180','270']):'';
