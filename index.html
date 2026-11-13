@@ -6,12 +6,12 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#4f46e5">
 <title>TheMaxTool — Free Online Tools for India & Beyond</title>
-<meta name="description" content="Free online tools with instant live preview: GST, EMI, SIP, Attendance, WhatsApp Link, PDF tools, Image & Signature Compressor.">
+<meta name="description" content="Free online tools with instant live preview: Unlimited PDF Editor, GST, EMI, SIP, Attendance, WhatsApp Link, Image & Signature Compressor.">
 <link rel="canonical" href="https://themaxtool.com/">
 <link rel="icon" type="image/svg+xml" href="/logo.svg">
 <meta property="og:type" content="website">
 <meta property="og:title" content="TheMaxTool — Free Everyday Online Tools with Live Preview">
-<meta property="og:description" content="Compress images to 20KB/50KB, resize signatures, calculate GST/EMI/SIP/Attendance & merge PDFs — 100% free in your browser.">
+<meta property="og:description" content="Unlimited PDF Editor, Image Compressor (20KB/50KB), Signature Resizer, GST/EMI/SIP/Attendance Calculators — 100% free in your browser.">
 <meta property="og:url" content="https://themaxtool.com/">
 <meta property="og:image" content="https://themaxtool.com/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,16 +35,26 @@ section{padding:24px 0 36px}.head{display:flex;justify-content:space-between;ali
 </style>
 </head>
 <body>
-<header><div class="wrap nav"><a class="logo" href="/"><img src="/logo.svg" alt="TheMaxTool logo" width="36" height="36" style="border-radius:11px">TheMax<span>Tool</span></a><div class="navright"><select id="lang" aria-label="Language" style="width:auto"><option value="en">English</option><option value="hi">हिन्दी</option></select><button id="theme" aria-label="Toggle dark mode">☾</button></div></div></header>
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="/"><img src="/logo.svg" alt="TheMaxTool logo" width="36" height="36" style="border-radius:11px">TheMax<span>Tool</span></a>
+    <div class="navright">
+      <a href="/pdf-editor.html" class="primary btn" style="font-size:13px">✍️ PDF Editor</a>
+      <select id="lang" aria-label="Language" style="width:auto"><option value="en">English</option><option value="hi">हिन्दी</option></select>
+      <button id="theme" aria-label="Toggle dark mode">☾</button>
+    </div>
+  </div>
+</header>
+
 <main class="wrap">
 <div class="hero">
   <span class="eyebrow" id="eyebrow">🇮🇳 Made for India. Ready for the world.</span>
   <h1 id="headline">Everyday tools.<br><span class="grad">Made simple for everyone.</span></h1>
-  <p id="subhead">From GST, EMI &amp; Attendance to PDFs, Images and WhatsApp tools — with instant live preview.</p>
-  <div class="search"><input id="search" type="search" placeholder="Search 31 tools — GST, Image, Signature, Attendance, PDF..." aria-label="Search tools"><button class="primary" id="searchbtn">Search</button></div>
-  <div class="chips"><button class="chip" data-q="GST">GST</button><button class="chip" data-q="Image">Image 20KB</button><button class="chip" data-q="Signature">Signature</button><button class="chip" data-q="Attendance">Attendance</button><button class="chip" data-q="WhatsApp">WhatsApp</button><button class="chip" data-q="PDF">PDF</button></div>
+  <p id="subhead">Unlimited PDF Editor, GST, EMI, Attendance, Images &amp; WhatsApp tools — with instant live preview.</p>
+  <div class="search"><input id="search" type="search" placeholder="Search 32 tools — PDF Editor, GST, Image, Signature, Attendance..." aria-label="Search tools"><button class="primary" id="searchbtn">Search</button></div>
+  <div class="chips"><button class="chip" data-q="PDF Editor">✍️ PDF Editor</button><button class="chip" data-q="GST">GST</button><button class="chip" data-q="Image">Image 20KB</button><button class="chip" data-q="Signature">Signature</button><button class="chip" data-q="Attendance">Attendance</button><button class="chip" data-q="WhatsApp">WhatsApp</button></div>
   <div id="recentWrap" class="recent-bar hidden"></div>
-  <div class="trust"><span><b>✓</b> Live visual preview</span><span><b>✓</b> 100% Free &amp; fast</span><span><b>✓</b> Local device privacy</span><span><b>✓</b> Indian formats</span></div>
+  <div class="trust"><span><b>✓</b> Unlimited PDF Editor</span><span><b>✓</b> Live visual preview</span><span><b>✓</b> 100% Free &amp; fast</span><span><b>✓</b> Local device privacy</span></div>
 </div>
 
 <div class="toolarea" id="toolarea">
@@ -72,7 +82,7 @@ section{padding:24px 0 36px}.head{display:flex;justify-content:space-between;ali
   <p id="empty" class="muted hidden">No matching tools found.</p>
 </section>
 
-<section><div class="panel"><h2>Fast, privacy-first utilities for India &amp; beyond</h2><p class="muted">TheMaxTool brings essential everyday calculators, exam photo/signature resizers, PDF utilities, and developer tools together in one clean workspace.</p></div></section>
+<section><div class="panel"><h2>Fast, unlimited utilities for India &amp; beyond</h2><p class="muted">TheMaxTool brings an unlimited Sejda-style PDF Editor, everyday calculators, exam photo/signature resizers, and developer tools together in one clean workspace.</p></div></section>
 </main>
 
 <footer><div class="wrap foot"><span>© <span id="year"></span> TheMaxTool. All rights reserved.</span><nav class="footerlinks"><a href="/about.html">About</a> · <a href="/faq.html">FAQ</a> · <a href="/contact.html">Contact</a> · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/disclaimer.html">Disclaimer</a> · <a href="/cookies.html">Cookies</a></nav></div></footer>
@@ -80,14 +90,40 @@ section{padding:24px 0 36px}.head{display:flex;justify-content:space-between;ali
 <script>
 const $=id=>document.getElementById(id),fmt=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2});
 const tools=[
-['GST Calculator','Finance','₹','CGST, SGST & IGST calculation','gst','/gst-calculator.html'],['EMI Calculator','Finance','🏦','Monthly loan EMI & interest chart','emi','/emi-calculator.html'],['SIP Calculator','Finance','📈','Mutual fund wealth & return estimate','sip','/sip-calculator.html'],['FD Calculator','Finance','💰','Fixed deposit maturity & interest','fd','/fd-calculator.html'],['RD Calculator','Finance','🗓️','Recurring deposit maturity estimate','rd','/rd-calculator.html'],['In-hand Salary','Finance','💼','Monthly take-home after PF & tax','salary','/in-hand-salary-calculator.html'],['Profit, Loss & Discount','Business','📊','Selling price, margin & discount','profit','/profit-loss-discount.html'],['Number to Words (INR)','Business','🔢','Invoice-style Rupees in words','wordsnum',''],
-['Image Compressor','Image','🗜️','Compress photo to 20KB, 50KB, 100KB','compress','/image-compressor.html'],['Signature Resizer','Image','✍️','Resize exam signature with live preview','signature',''],['Passport Photo Maker','Image','🪪','Create standard passport photo canvas','passport',''],['Image Resizer','Image','📐','Resize image by exact width & height','resize',''],['JPG ↔ PNG Converter','Image','🔁','Convert image format with live preview','convert',''],
-['Attendance Calculator','Student','🎓','Check 75% attendance & bunk status','attendance',''],['CGPA to Percentage','Student','📋','Convert university CGPA to % marks','cgpa','/cgpa-to-percentage.html'],['Percentage Calculator','Student','％','Marks & percentage change calculator','percent','/percentage-calculator.html'],['Age Calculator','Student','🎂','Exact age in years, months & days','age','/age.html'],
-['WhatsApp Link Maker','Everyday','💬','Create direct wa.me chat link + QR','whatsapp',''],['QR Code Generator','Everyday','▦','Create QR codes from URL or text','qr',''],['Unit Converter','Everyday','↔','Convert kg, km, cm, °C/°F & tonnes','unit',''],
-['PDF Merge','PDF','📑','Combine multiple PDF files into one','pdfmerge',''],['PDF Split','PDF','✂️','Extract specific pages from a PDF','pdfsplit',''],['PDF Rotate','PDF','🔄','Rotate PDF pages 90°, 180° or 270°','pdfrotate',''],['PDF to JPG','PDF','🖼','Convert PDF pages to JPG images','pdftojpg',''],['JPG / PNG to PDF','PDF','📄','Convert images into a single PDF','imgtopdf',''],
-['JSON Formatter','Developer','{}','Beautify, minify & validate JSON','json','/json.html'],['Base64 Encoder / Decoder','Developer','⇄','Encode and decode Base64 strings','base64',''],['URL Encoder / Decoder','Developer','🔗','Safely encode or decode web URLs','url',''],['Color Picker','Developer','🎨','Pick color & copy HEX code live','color',''],['Password Generator','Security','🔐','Generate strong random passwords','password',''],['Word Counter','Text','T','Live words, characters & reading time','words','']
+['PDF Editor (Unlimited)','PDF','✍️','Add text, sign, whiteout & highlight PDF','pdfedit','/pdf-editor.html'],
+['PDF Merge','PDF','📑','Combine multiple PDF files into one','pdfmerge',''],
+['PDF Split','PDF','✂️','Extract specific pages from a PDF','pdfsplit',''],
+['PDF Rotate','PDF','🔄','Rotate PDF pages 90°, 180° or 270°','pdfrotate',''],
+['PDF to JPG','PDF','🖼','Convert PDF pages to JPG images','pdftojpg',''],
+['JPG / PNG to PDF','PDF','📄','Convert images into a single PDF','imgtopdf',''],
+['GST Calculator','Finance','₹','CGST, SGST & IGST calculation','gst','/gst-calculator.html'],
+['EMI Calculator','Finance','🏦','Monthly loan EMI & interest chart','emi','/emi-calculator.html'],
+['SIP Calculator','Finance','📈','Mutual fund wealth & return estimate','sip','/sip-calculator.html'],
+['FD Calculator','Finance','💰','Fixed deposit maturity & interest','fd','/fd-calculator.html'],
+['RD Calculator','Finance','🗓️','Recurring deposit maturity estimate','rd','/rd-calculator.html'],
+['In-hand Salary','Finance','💼','Monthly take-home after PF & tax','salary','/in-hand-salary-calculator.html'],
+['Profit, Loss & Discount','Business','📊','Selling price, margin & discount','profit','/profit-loss-discount.html'],
+['Number to Words (INR)','Business','🔢','Invoice-style Rupees in words','wordsnum',''],
+['Image Compressor','Image','🗜️','Compress photo to 20KB, 50KB, 100KB','compress','/image-compressor.html'],
+['Signature Resizer','Image','🖋️','Resize exam signature with live preview','signature',''],
+['Passport Photo Maker','Image','🪪','Create standard passport photo canvas','passport',''],
+['Image Resizer','Image','📐','Resize image by exact width & height','resize',''],
+['JPG ↔ PNG Converter','Image','🔁','Convert image format with live preview','convert',''],
+['Attendance Calculator','Student','🎓','Check 75% attendance & bunk status','attendance',''],
+['CGPA to Percentage','Student','📋','Convert university CGPA to % marks','cgpa','/cgpa-to-percentage.html'],
+['Percentage Calculator','Student','％','Marks & percentage change calculator','percent','/percentage-calculator.html'],
+['Age Calculator','Student','🎂','Exact age in years, months & days','age','/age.html'],
+['WhatsApp Link Maker','Everyday','💬','Create direct wa.me chat link + QR','whatsapp',''],
+['QR Code Generator','Everyday','▦','Create QR codes from URL or text','qr',''],
+['Unit Converter','Everyday','↔','Convert kg, km, cm, °C/°F & tonnes','unit',''],
+['JSON Formatter','Developer','{}','Beautify, minify & validate JSON','json','/json.html'],
+['Base64 Encoder / Decoder','Developer','⇄','Encode and decode Base64 strings','base64',''],
+['URL Encoder / Decoder','Developer','🔗','Safely encode or decode web URLs','url',''],
+['Color Picker','Developer','🎨','Pick color & copy HEX code live','color',''],
+['Password Generator','Security','🔐','Generate strong random passwords','password',''],
+['Word Counter','Text','T','Live words, characters & reading time','words','']
 ];
-const cats=['All','Finance','Image','Student','Business','Everyday','PDF','Developer','Security','Text'];
+const cats=['All','PDF','Finance','Image','Student','Business','Everyday','Developer','Security','Text'];
 let active='All',current='',favs=JSON.parse(localStorage.getItem('tmt-favs')||'[]'),recent=JSON.parse(localStorage.getItem('tmt-recent')||'[]'),selectedFiles=[],latestBlob=null,latestFilename='themaxtool-output',libsLoaded=false;
 
 function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
@@ -99,7 +135,7 @@ function render(){
   $('cats').innerHTML=cats.map(c=>`<button class="cat ${active===c?'active':''}" data-cat="${c}">${c}</button>`).join('')+`<button class="cat ${active==='Favorites'?'active':''}" data-cat="Favorites">★ Favorites (${favs.length})</button>`;
   let q=$('search').value.toLowerCase().trim();
   let list=tools.filter(t=>(active==='All'||(active==='Favorites'?favs.includes(t[4]):t[1]===active))&&t.join(' ').toLowerCase().includes(q));
-  $('grid').innerHTML=list.map(t=>{const isFav=favs.includes(t[4]);return `<div class="card ${current===t[4]?'active-card':''}" data-id="${t[4]}"><button class="star-btn ${isFav?'starred':''}" data-fav="${t[4]}">${isFav?'★':'☆'}</button><div class="ico">${t[2]}</div><h3>${t[0]}</h3><p>${t[3]}</p><span class="tag">Open live preview →</span></div>`}).join('');
+  $('grid').innerHTML=list.map(t=>{const isFav=favs.includes(t[4]);return `<div class="card ${current===t[4]?'active-card':''}" data-id="${t[4]}"><button class="star-btn ${isFav?'starred':''}" data-fav="${t[4]}">${isFav?'★':'☆'}</button><div class="ico">${t[2]}</div><h3>${t[0]}</h3><p>${t[3]}</p><span class="tag">${t[4]==='pdfedit'?'Launch Full Editor ↗':'Open live preview →'}</span></div>`}).join('');
   $('empty').classList.toggle('hidden',list.length>0);renderRecent();
 }
 
@@ -117,6 +153,7 @@ function n(id){return Number($(id)?.value||0)}
 function fileinput(l,id,m=false,a='.pdf'){return `<label class="field full">${l}<input id="${id}" type="file" accept="${a}" ${m?'multiple':''}></label>`}
 
 function openTool(id){
+  if(id==='pdfedit'){location.href='/pdf-editor.html';return}
   let t=tools.find(x=>x[4]===id);if(!t)return;
   current=id;selectedFiles=[];latestBlob=null;history.replaceState(null,'',`?tool=${id}`);
   recent=[id,...recent.filter(x=>x!==id)].slice(0,6);localStorage.setItem('tmt-recent',JSON.stringify(recent));
