@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NHPCFLSH9M"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-NHPCFLSH9M');</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Free Unlimited PDF Editor Online — Add Text, Sign & Whiteout | TheMaxTool</title>
+<meta name="description" content="Edit PDF files online for free with unlimited tasks. Add text, insert signature or stamp, whiteout text, and highlight pages directly in your browser.">
+<link rel="canonical" href="https://themaxtool.com/pdf-editor.html">
+<link rel="icon" type="image/svg+xml" href="/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+  :root{--bg:#f1f5f9;--card:#ffffff;--ink:#0f172a;--muted:#64748b;--line:#cbd5e1;--blue:#4f46e5;--violet:#7c3aed;--green:#059669}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,system-ui,sans-serif;display:flex;flex-direction:column;min-height:100vh}
+  header{background:#fff;border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .logo{display:flex;align-items:center;gap:9px;font-size:20px;font-weight:900;text-decoration:none;color:var(--ink);letter-spacing:-0.6px}
+  .logo span{color:var(--blue)}
+  .badge{background:#dcfce7;color:#15803d;font-size:11px;font-weight:800;padding:4px 10px;border-radius:99px}
+  /* Sejda-Style Sticky Toolbar */
+  .toolbar{background:#fff;border-bottom:1px solid var(--line);padding:10px 18px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;position:sticky;top:0;z-index:30;box-shadow:0 4px 12px rgba(15,23,42,.05)}
+  .tbtn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:8px 13px;border-radius:9px;font-weight:650;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.15s}
+  .tbtn:hover{border-color:var(--blue);background:#eef2ff}
+  .tbtn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .sep{width:1px;height:26px;background:var(--line);margin:0 4px}
+  .ctrl-group{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--muted)}
+  .ctrl-group input[type=number]{width:58px;padding:6px;border:1px solid var(--line);border-radius:7px}
+  .ctrl-group input[type=color]{width:32px;height:32px;border:1px solid var(--line);border-radius:7px;padding:2px;cursor:pointer}
+  .save-btn{background:linear-gradient(135deg,var(--green),#10b981);color:#fff;border:none;padding:9px 18px;border-radius:9px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(5,150,105,.25)}
+  .save-btn:hover{opacity:.94}
+  /* Upload Dropzone */
+  .upload-wrap{max-width:620px;margin:60px auto;background:#fff;border:2px dashed #94a3b8;border-radius:20px;padding:48px 24px;text-align:center;box-shadow:0 12px 32px rgba(15,23,42,.06)}
+  .upload-btn{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;border:none;padding:14px 28px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin-top:16px}
+  /* Interactive PDF Stage */
+  .stage-wrap{flex:1;overflow:auto;padding:24px 16px;display:flex;flex-direction:column;align-items:center}
+  .page-stage{position:relative;background:#fff;box-shadow:0 14px 36px rgba(15,23,42,.15);border:1px solid #cbd5e1;user-select:none;cursor:crosshair}
+  canvas#pdfCanvas{display:block}
+  .overlay-layer{position:absolute;inset:0;overflow:hidden}
+  .el-item{position:absolute;cursor:move;border:1.5px dashed transparent;padding:2px 4px;line-height:1.2}
+  .el-item:hover,.el-item.selected{border-color:var(--blue);background:rgba(79,70,229,.06)}
+  .el-text{outline:none;min-width:40px;white-space:pre-wrap;font-family:Helvetica,Arial,sans-serif;font-weight:600}
+  .el-del{position:absolute;top:-11px;right:-11px;width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;border:none;font-size:11px;font-weight:800;display:none;place-items:center;cursor:pointer}
+  .el-item:hover .el-del,.el-item.selected .el-del{display:grid}
+  .el-whiteout{background:#ffffff;border:1px solid #cbd5e1}
+  .el-highlight{background:rgba(250,204,21,0.42)}
+  .el-img img{width:100%;height:100%;object-fit:contain;pointer-events:none;display:block}
+  .resize-handle{position:absolute;right:-5px;bottom:-5px;width:11px;height:11px;background:var(--blue);border-radius:50%;cursor:nwse-resize;display:none}
+  .el-item:hover .resize-handle,.el-item.selected .resize-handle{display:block}
+  .hint-bar{background:#eef2ff;color:var(--blue);font-size:12px;font-weight:600;padding:6px 14px;border-radius:99px;margin-bottom:14px}
+  .hidden{display:none!important}
+  footer{background:#fff;border-top:1px solid var(--line);padding:16px 20px;text-align:center;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="/"><img src="/logo.svg" width="32" height="32" style="border-radius:8px" alt="Logo">TheMax<span>Tool</span></a>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span class="badge">✓ 100% UNLIMITED • NO FILE LIMITS</span>
+    <a href="/" class="tbtn" style="text-decoration:none">← All Tools</a>
+  </div>
+</header>
+
+<!-- Sejda-Style Toolbar -->
+<div class="toolbar hidden" id="toolbar">
+  <button class="tbtn active" data-mode="text" id="btnText"><span>T</span> Add Text</button>
+  <button class="tbtn" id="btnSign"><span>✍️</span> Add Sign / Image</button>
+  <input type="file" id="signInput" accept="image/*" class="hidden">
+  <button class="tbtn" data-mode="whiteout" id="btnWhite"><span>⬜</span> Whiteout</button>
+  <button class="tbtn" data-mode="highlight" id="btnHigh"><span>🖍️</span> Highlight</button>
+  <div class="sep"></div>
+  <label class="ctrl-group">Size <input type="number" id="fontSize" value="16" min="8" max="72"></label>
+  <label class="ctrl-group">Color <input type="color" id="fontColor" value="#111827"></label>
+  <div class="sep"></div>
+  <button class="tbtn" id="prevPage">◀</button>
+  <span style="font-weight:700;font-size:13px" id="pageIndicator">Page 1 / 1</span>
+  <button class="tbtn" id="nextPage">▶</button>
+  <div class="sep"></div>
+  <button class="save-btn" id="applySaveBtn">✓ Apply Changes &amp; Download PDF</button>
+</div>
+
+<!-- Initial Upload Box -->
+<div class="upload-wrap" id="uploadBox">
+  <div style="font-size:44px;margin-bottom:10px">📄</div>
+  <h1 style="margin:0 0 8px;font-size:26px">Free Unlimited Online PDF Editor</h1>
+  <p style="color:var(--muted);margin:0 auto;max-width:440px">Click anywhere on your PDF to add text, insert your signature or stamp, whiteout mistakes, and highlight text. Runs 100% locally in your browser.</p>
+  <input type="file" id="pdfUpload" accept="application/pdf" class="hidden">
+  <button class="upload-btn" onclick="document.getElementById('pdfUpload').click()">Choose PDF File</button>
+  <div style="margin-top:16px;font-size:12px;color:var(--muted)">🔒 Private &amp; Secure • Files never leave your computer</div>
+</div>
+
+<!-- Interactive Editor Stage -->
+<div class="stage-wrap hidden" id="editorStage">
+  <div class="hint-bar" id="modeHint">💡 Mode: <b>Add Text</b> — Click anywhere on the PDF page below to type text, or drag items to reposition.</div>
+  <div class="page-stage" id="pageStage">
+    <canvas id="pdfCanvas"></canvas>
+    <div class="overlay-layer" id="overlayLayer"></div>
+  </div>
+</div>
+
+<footer>© <span id="yr"></span> TheMaxTool • Free Unlimited Browser PDF Editor • <a href="/privacy.html" style="color:var(--blue)">Privacy Policy</a></footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+let rawPdfBytes = null, pdfJsDoc = null, currentPage = 1, totalPages = 1, scale = 1.35;
+let mode = 'text', items = [], selectedId = null;
+
+const pdfUpload = document.getElementById('pdfUpload');
+const canvas = document.getElementById('pdfCanvas');
+const ctx = canvas.getContext('2d');
+const overlay = document.getElementById('overlayLayer');
+
+// Mode switching
+document.querySelectorAll('[data-mode]').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('[data-mode]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    mode = btn.dataset.mode;
+    const hints = {
+      text: '💡 Mode: <b>Add Text</b> — Click anywhere on the PDF page to insert editable text.',
+      whiteout: '💡 Mode: <b>Whiteout</b> — Click on the page to place a white cover box, then drag corner to resize.',
+      highlight: '💡 Mode: <b>Highlight</b> — Click on the page to place a yellow highlight strip, then drag corner to resize.'
+    };
+    document.getElementById('modeHint').innerHTML = hints[mode];
+  };
+});
+
+// Add Signature / Image
+document.getElementById('btnSign').onclick = () => document.getElementById('signInput').click();
+document.getElementById('signInput').onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    items.push({
+      id: Date.now(), page: currentPage, type: 'image',
+      x: 80, y: 100, w: 150, h: 65, dataUrl: r.result, mime: f.type
+    });
+    renderOverlay();
+  };
+  r.readAsDataURL(f);
+  e.target.value = '';
+};
+
+// Load PDF
+pdfUpload.onchange = async e => {
+  const file = e.target.files[0]; if (!file) return;
+  rawPdfBytes = await file.arrayBuffer();
+  pdfJsDoc = await pdfjsLib.getDocument({ data: rawPdfBytes.slice(0) }).promise;
+  totalPages = pdfJsDoc.numPages;
+  currentPage = 1; items = [];
+  document.getElementById('uploadBox').classList.add('hidden');
+  document.getElementById('toolbar').classList.remove('hidden');
+  document.getElementById('editorStage').classList.remove('hidden');
+  renderPage();
+};
+
+async function renderPage() {
+  const page = await pdfJsDoc.getPage(currentPage);
+  const viewport = page.getViewport({ scale });
+  canvas.width = viewport.width;
+  canvas.height = viewport.height;
+  document.getElementById('pageStage').style.width = viewport.width + 'px';
+  document.getElementById('pageStage').style.height = viewport.height + 'px';
+  document.getElementById('pageIndicator').textContent = `Page ${currentPage} / ${totalPages}`;
+  await page.render({ canvasContext: ctx, viewport }).promise;
+  renderOverlay();
+}
+
+document.getElementById('prevPage').onclick = () => { if (currentPage > 1) { currentPage--; renderPage(); } };
+document.getElementById('nextPage').onclick = () => { if (currentPage < totalPages) { currentPage++; renderPage(); } };
+
+// Click on PDF page to place new element
+overlay.addEventListener('mousedown', e => {
+  if (e.target !== overlay) return;
+  const rect = overlay.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  if (mode === 'text') {
+    const id = Date.now();
+    items.push({
+      id, page: currentPage, type: 'text',
+      x, y: y - 10, text: 'Type here',
+      size: Number(document.getElementById('fontSize').value) || 16,
+      color: document.getElementById('fontColor').value
+    });
+    selectedId = id;
+    renderOverlay();
+    setTimeout(() => {
+      const el = document.querySelector(`[data-id="${id}"] .el-text`);
+      if (el) { el.focus(); document.execCommand('selectAll', false, null); }
+    }, 20);
+  } else if (mode === 'whiteout' || mode === 'highlight') {
+    const id = Date.now();
+    items.push({
+      id, page: currentPage, type: mode,
+      x, y, w: 140, h: 26
+    });
+    selectedId = id;
+    renderOverlay();
+  }
+});
+
+// Live update selected text size/color
+document.getElementById('fontSize').oninput = e => {
+  const it = items.find(i => i.id === selectedId && i.type === 'text');
+  if (it) { it.size = Number(e.target.value) || 16; renderOverlay(); }
+};
+document.getElementById('fontColor').oninput = e => {
+  const it = items.find(i => i.id === selectedId && i.type === 'text');
+  if (it) { it.color = e.target.value; renderOverlay(); }
+};
+
+function renderOverlay() {
+  overlay.innerHTML = '';
+  items.filter(i => i.page === currentPage).forEach(it => {
+    const wrap = document.createElement('div');
+    wrap.className = 'el-item' + (it.id === selectedId ? ' selected' : '');
+    wrap.dataset.id = it.id;
+    wrap.style.left = it.x + 'px';
+    wrap.style.top = it.y + 'px';
+
+    if (it.type === 'text') {
+      const span = document.createElement('div');
+      span.className = 'el-text';
+      span.contentEditable = true;
+      span.textContent = it.text;
+      span.style.fontSize = it.size + 'px';
+      span.style.color = it.color;
+      span.oninput = () => { it.text = span.textContent; };
+      span.onfocus = () => { selectedId = it.id; };
+      wrap.appendChild(span);
+    } else if (it.type === 'whiteout' || it.type === 'highlight') {
+      wrap.classList.add(it.type === 'whiteout' ? 'el-whiteout' : 'el-highlight');
+      wrap.style.width = it.w + 'px';
+      wrap.style.height = it.h + 'px';
+      addResizer(wrap, it);
+    } else if (it.type === 'image') {
+      wrap.classList.add('el-img');
+      wrap.style.width = it.w + 'px';
+      wrap.style.height = it.h + 'px';
+      wrap.innerHTML = `<img src="${it.dataUrl}" alt="Sign">`;
+      addResizer(wrap, it);
+    }
+
+    const del = document.createElement('button');
+    del.className = 'el-del';
+    del.textContent = '×';
+    del.onclick = ev => { ev.stopPropagation(); items = items.filter(x => x.id !== it.id); renderOverlay(); };
+    wrap.appendChild(del);
+
+    makeDraggable(wrap, it);
+    overlay.appendChild(wrap);
+  });
+}
+
+function makeDraggable(el, it) {
+  el.addEventListener('mousedown', e => {
+    if (e.target.classList.contains('resize-handle') || e.target.classList.contains('el-del')) return;
+    selectedId = it.id;
+    const startX = e.clientX - it.x, startY = e.clientY - it.y;
+    const move = ev => {
+      it.x = Math.max(0, ev.clientX - startX);
+      it.y = Math.max(0, ev.clientY - startY);
+      el.style.left = it.x + 'px';
+      el.style.top = it.y + 'px';
+    };
+    const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  });
+}
+
+function addResizer(el, it) {
+  const h = document.createElement('div');
+  h.className = 'resize-handle';
+  h.onmousedown = e => {
+    e.stopPropagation();
+    const startX = e.clientX, startY = e.clientY, origW = it.w, origH = it.h;
+    const move = ev => {
+      it.w = Math.max(20, origW + (ev.clientX - startX));
+      it.h = Math.max(12, origH + (ev.clientY - startY));
+      el.style.width = it.w + 'px';
+      el.style.height = it.h + 'px';
+    };
+    const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+  el.appendChild(h);
+}
+
+function hexToRgb(hex) {
+  const n = parseInt(hex.replace('#', ''), 16);
+  return PDFLib.rgb(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255);
+}
+
+// Compile & Download Edited PDF
+document.getElementById('applySaveBtn').onclick = async () => {
+  const btn = document.getElementById('applySaveBtn');
+  btn.textContent = '⏳ Saving PDF...';
+  try {
+    const pdfDoc = await PDFLib.PDFDocument.load(rawPdfBytes);
+    const font = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+
+    for (const it of items) {
+      const page = pdfDoc.getPage(it.page - 1);
+      const { width, height } = page.getSize();
+      const ratioX = width / canvas.width;
+      const ratioY = height / canvas.height;
+
+      if (it.type === 'text') {
+        const fontSizePdf = it.size * ratioY;
+        page.drawText(it.text || '', {
+          x: (it.x + 4) * ratioX,
+          y: height - ((it.y + it.size) * ratioY),
+          size: fontSizePdf,
+          font,
+          color: hexToRgb(it.color || '#111827')
+        });
+      } else if (it.type === 'whiteout') {
+        page.drawRectangle({
+          x: it.x * ratioX,
+          y: height - ((it.y + it.h) * ratioY),
+          width: it.w * ratioX,
+          height: it.h * ratioY,
+          color: PDFLib.rgb(1, 1, 1)
+        });
+      } else if (it.type === 'highlight') {
+        page.drawRectangle({
+          x: it.x * ratioX,
+          y: height - ((it.y + it.h) * ratioY),
+          width: it.w * ratioX,
+          height: it.h * ratioY,
+          color: PDFLib.rgb(0.98, 0.8, 0.08),
+          opacity: 0.4
+        });
+      } else if (it.type === 'image') {
+        const imgBytes = await fetch(it.dataUrl).then(r => r.arrayBuffer());
+        const embedded = it.mime === 'image/png' ? await pdfDoc.embedPng(imgBytes) : await pdfDoc.embedJpg(imgBytes);
+        page.drawImage(embedded, {
+          x: it.x * ratioX,
+          y: height - ((it.y + it.h) * ratioY),
+          width: it.w * ratioX,
+          height: it.h * ratioY
+        });
+      }
+    }
+
+    const outBytes = await pdfDoc.save();
+    const blob = new Blob([outBytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'edited-themaxtool.pdf'; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+  } catch (err) {
+    alert('Error saving PDF: ' + err.message);
+  }
+  btn.textContent = '✓ Apply Changes & Download PDF';
+};
+</script>
+</body>
+</html>
