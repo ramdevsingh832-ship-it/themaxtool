@@ -5,12 +5,26 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-NHPCFLSH9M');</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Free Unlimited PDF Editor Online — Edit Existing Text, Sign & Whiteout | TheMaxTool</title>
-<meta name="description" content="Edit existing text inside PDF files online for free with unlimited tasks. Click any text to edit, add signature or stamp, whiteout, and highlight directly in your browser.">
+<title>Free PDF Editor Online – Edit Text, Sign & Whiteout | TheMaxTool</title>
+<meta name="description" content="Edit PDF text online free. Click any text to edit, add signature, whiteout or highlight. No upload, no signup, works in your browser.">
 <link rel="canonical" href="https://themaxtool.com/pdf-editor.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free PDF Editor Online – Edit Text, Sign & Whiteout">
+<meta property="og:description" content="Edit PDF text, add signature, whiteout and highlight in your browser. Free, private, no signup.">
+<meta property="og:url" content="https://themaxtool.com/pdf-editor.html">
+<meta property="og:image" content="https://themaxtool.com/logo.svg">
 <link rel="icon" type="image/svg+xml" href="/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"SoftwareApplication","name":"TheMaxTool PDF Editor","applicationCategory":"BusinessApplication","operatingSystem":"Any","url":"https://themaxtool.com/pdf-editor.html","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Is this PDF editor really free?","acceptedAnswer":{"@type":"Answer","text":"Yes. It is free with no signup and no limit on files."}},
+{"@type":"Question","name":"Are my PDF files uploaded to a server?","acceptedAnswer":{"@type":"Answer","text":"No. Editing runs inside your browser, so your file stays on your device."}},
+{"@type":"Question","name":"Can I add my signature to a PDF?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use Add Sign / Image, upload a picture of your signature, then drag and resize it."}},
+{"@type":"Question","name":"Does it work on a phone?","acceptedAnswer":{"@type":"Answer","text":"Yes. You can tap text to edit it and drag items using the move handle."}}]}]}
+</script>
 <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
@@ -21,7 +35,6 @@
   .logo{display:flex;align-items:center;gap:9px;font-size:20px;font-weight:900;text-decoration:none;color:var(--ink);letter-spacing:-0.6px}
   .logo span{color:var(--blue)}
   .badge{background:#dcfce7;color:#15803d;font-size:11px;font-weight:800;padding:4px 10px;border-radius:99px}
-  /* Sejda-Style Sticky Toolbar */
   .toolbar{background:#fff;border-bottom:1px solid var(--line);padding:10px 18px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;position:sticky;top:0;z-index:30;box-shadow:0 4px 12px rgba(15,23,42,.05)}
   .tbtn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:8px 13px;border-radius:9px;font-weight:650;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.15s}
   .tbtn:hover{border-color:var(--blue);background:#eef2ff}
@@ -32,45 +45,47 @@
   .ctrl-group input[type=color]{width:32px;height:32px;border:1px solid var(--line);border-radius:7px;padding:2px;cursor:pointer}
   .save-btn{background:linear-gradient(135deg,var(--green),#10b981);color:#fff;border:none;padding:9px 18px;border-radius:9px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(5,150,105,.25)}
   .save-btn:hover{opacity:.94}
-  /* Upload Dropzone */
   .upload-wrap{max-width:620px;margin:60px auto;background:#fff;border:2px dashed #94a3b8;border-radius:20px;padding:48px 24px;text-align:center;box-shadow:0 12px 32px rgba(15,23,42,.06)}
   .upload-btn{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;border:none;padding:14px 28px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin-top:16px}
-  /* Interactive PDF Stage */
   .stage-wrap{flex:1;overflow:auto;padding:24px 16px;display:flex;flex-direction:column;align-items:center}
   .page-stage{position:relative;background:#fff;box-shadow:0 14px 36px rgba(15,23,42,.15);border:1px solid #cbd5e1;user-select:none;cursor:text}
   canvas#pdfCanvas{display:block}
   .text-detect-layer,.overlay-layer{position:absolute;inset:0;overflow:hidden}
-  /* Detected Existing PDF Text Blocks */
+  .overlay-layer{pointer-events:none}
   .pdf-detected{position:absolute;border:1px dashed rgba(79,70,229,0.28);border-radius:3px;cursor:text;transition:.12s;background:transparent}
   .pdf-detected:hover{border-color:#4f46e5;background:rgba(79,70,229,0.10)}
-  /* Editable Items */
-  .el-item{position:absolute;cursor:move;border:1.5px dashed transparent;padding:1px 3px;line-height:1.15}
+  .el-item{position:absolute;cursor:move;border:1.5px dashed transparent;padding:1px 3px;line-height:1.15;pointer-events:auto}
+  .el-item.el-whiteout,.el-item.el-highlight,.el-item.el-img{touch-action:none}
   .el-item:hover,.el-item.selected{border-color:var(--blue);background:rgba(79,70,229,.06)}
   .el-item.replaced-text{background:#ffffff;box-shadow:0 0 0 2px #ffffff}
-  .el-text{outline:none;min-width:24px;white-space:pre-wrap;font-family:Helvetica,Arial,sans-serif;font-weight:500;cursor:text}
-  .el-del{position:absolute;top:-11px;right:-11px;width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;border:none;font-size:11px;font-weight:800;display:none;place-items:center;cursor:pointer;z-index:5}
-  .el-item:hover .el-del,.el-item.selected .el-del{display:grid}
+  .el-text{outline:none;min-width:24px;white-space:pre-wrap;font-family:Helvetica,Arial,sans-serif;font-weight:500;cursor:text;user-select:text;-webkit-user-select:text}
+  .el-del{position:absolute;top:-11px;right:-11px;width:22px;height:22px;border-radius:50%;background:#ef4444;color:#fff;border:none;font-size:12px;font-weight:800;display:none;place-items:center;cursor:pointer;z-index:5}
+  .move-handle{position:absolute;top:-11px;left:-11px;width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;display:none;place-items:center;cursor:move;z-index:5;touch-action:none;user-select:none}
+  .el-item:hover .el-del,.el-item.selected .el-del,.el-item:hover .move-handle,.el-item.selected .move-handle{display:grid}
   .el-whiteout{background:#ffffff;border:1px solid #cbd5e1}
   .el-highlight{background:rgba(250,204,21,0.42)}
   .el-img img{width:100%;height:100%;object-fit:contain;pointer-events:none;display:block}
-  .resize-handle{position:absolute;right:-5px;bottom:-5px;width:11px;height:11px;background:var(--blue);border-radius:50%;cursor:nwse-resize;display:none}
+  .resize-handle{position:absolute;right:-8px;bottom:-8px;width:18px;height:18px;background:var(--blue);border-radius:50%;cursor:nwse-resize;display:none;touch-action:none}
   .el-item:hover .resize-handle,.el-item.selected .resize-handle{display:block}
   .hint-bar{background:#eef2ff;color:var(--blue);font-size:12px;font-weight:600;padding:7px 15px;border-radius:99px;margin-bottom:14px;text-align:center}
   .hidden{display:none!important}
+  .seo{max-width:760px;margin:30px auto;padding:0 16px;line-height:1.7}
+  .seo h2{font-size:20px;margin:26px 0 8px}
+  .seo h3{font-size:15px;margin:16px 0 4px}
+  .seo p,.seo li{color:#334155}
   footer{background:#fff;border-top:1px solid var(--line);padding:16px 20px;text-align:center;font-size:12px;color:var(--muted)}
 </style>
 </head>
 <body>
 
 <header>
-  <a class="logo" href="/"><img src="/logo.svg" width="32" height="32" style="border-radius:8px" alt="Logo">TheMax<span>Tool</span></a>
+  <a class="logo" href="/"><img src="/logo.svg" width="32" height="32" style="border-radius:8px" alt="TheMaxTool logo">TheMax<span>Tool</span></a>
   <div style="display:flex;align-items:center;gap:10px">
     <span class="badge">✓ 100% UNLIMITED • CLICK ANY TEXT TO EDIT</span>
     <a href="/" class="tbtn" style="text-decoration:none">← All Tools</a>
   </div>
 </header>
 
-<!-- Sejda-Style Toolbar -->
 <div class="toolbar hidden" id="toolbar">
   <button class="tbtn active" data-mode="text" id="btnText"><span>T</span> Edit / Add Text</button>
   <button class="tbtn" id="btnSign"><span>✍️</span> Add Sign / Image</button>
@@ -88,17 +103,15 @@
   <button class="save-btn" id="applySaveBtn">✓ Apply Changes &amp; Download PDF</button>
 </div>
 
-<!-- Initial Upload Box -->
 <div class="upload-wrap" id="uploadBox">
   <div style="font-size:44px;margin-bottom:10px">📄</div>
   <h1 style="margin:0 0 8px;font-size:26px">Free Unlimited Online PDF Editor</h1>
   <p style="color:var(--muted);margin:0 auto;max-width:460px">Click directly on <b>existing PDF text</b> to edit or delete it, add new text, insert your signature or stamp, and whiteout mistakes. 100% free &amp; private.</p>
   <input type="file" id="pdfUpload" accept="application/pdf" class="hidden">
   <button class="upload-btn" onclick="document.getElementById('pdfUpload').click()">Choose PDF File</button>
-  <div style="margin-top:16px;font-size:12px;color:var(--muted)">🔒 Private &amp; Secure • Files never leave your computer</div>
+  <div style="margin-top:16px;font-size:12px;color:var(--muted)">🔒 Private &amp; Secure • Files never leave your device</div>
 </div>
 
-<!-- Interactive Editor Stage -->
 <div class="stage-wrap hidden" id="editorStage">
   <div class="hint-bar" id="modeHint">💡 <b>Tip:</b> Click on any <b>existing text</b> inside the PDF to edit it directly, or click empty space to add new text.</div>
   <div class="page-stage" id="pageStage">
@@ -108,6 +121,30 @@
   </div>
 </div>
 
+<section class="seo" id="seoContent">
+  <h2>How to edit a PDF online</h2>
+  <ol>
+    <li>Click <b>Choose PDF File</b> and select your PDF.</li>
+    <li>Click any existing text to edit it, or click empty space to add new text.</li>
+    <li>Use Whiteout, Highlight or Add Sign / Image as needed.</li>
+    <li>Press <b>Apply Changes &amp; Download PDF</b> to save your edited file.</li>
+  </ol>
+
+  <h2>Frequently asked questions</h2>
+  <h3>Is this PDF editor really free?</h3>
+  <p>Yes. It is free with no signup and no limit on files.</p>
+  <h3>Are my PDF files uploaded to a server?</h3>
+  <p>No. Editing runs inside your browser, so your file stays on your device.</p>
+  <h3>Can I add my signature to a PDF?</h3>
+  <p>Yes. Use Add Sign / Image, upload a picture of your signature, then drag and resize it.</p>
+  <h3>Does it work on a phone?</h3>
+  <p>Yes. Tap text to edit it and drag items using the blue move handle.</p>
+
+  <h2>More free tools</h2>
+  <p><a href="/" style="color:var(--blue)">See all free tools</a></p>
+  <!-- Yahan apne dusre tool pages ke asli links jodo, jaise: <a href="/image-compressor.html">Image Compressor</a> -->
+</section>
+
 <footer>© <span id="yr"></span> TheMaxTool • Free Unlimited Browser PDF Editor • <a href="/privacy.html" style="color:var(--blue)">Privacy Policy</a></footer>
 
 <script>
@@ -116,12 +153,19 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 
 let rawPdfBytes = null, pdfJsDoc = null, currentPage = 1, totalPages = 1, scale = 1.4;
 let mode = 'text', items = [], selectedId = null, detectedBlocks = [];
+const pageDims = {};
 
 const pdfUpload = document.getElementById('pdfUpload');
 const canvas = document.getElementById('pdfCanvas');
 const ctx = canvas.getContext('2d');
+const stage = document.getElementById('pageStage');
 const detectLayer = document.getElementById('textDetectLayer');
 const overlay = document.getElementById('overlayLayer');
+
+function select(id) {
+  selectedId = id;
+  overlay.querySelectorAll('.el-item').forEach(n => n.classList.toggle('selected', Number(n.dataset.id) === id));
+}
 
 // Mode switching
 document.querySelectorAll('[data-mode]').forEach(btn => {
@@ -129,6 +173,7 @@ document.querySelectorAll('[data-mode]').forEach(btn => {
     document.querySelectorAll('[data-mode]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     mode = btn.dataset.mode;
+    detectLayer.style.pointerEvents = mode === 'text' ? 'auto' : 'none';
     const hints = {
       text: '💡 <b>Edit / Add Text:</b> Click any existing text box on the PDF to edit it, or click empty area to write new text.',
       whiteout: '💡 <b>Whiteout:</b> Click anywhere on the page to place a white cover box, then drag its corner to resize.',
@@ -144,10 +189,9 @@ document.getElementById('signInput').onchange = e => {
   const f = e.target.files[0]; if (!f) return;
   const r = new FileReader();
   r.onload = () => {
-    items.push({
-      id: Date.now(), page: currentPage, type: 'image',
-      x: 80, y: 100, w: 150, h: 65, dataUrl: r.result, mime: f.type
-    });
+    const id = Date.now();
+    items.push({ id, page: currentPage, type: 'image', x: 80, y: 100, w: 150, h: 65, dataUrl: r.result, mime: f.type });
+    selectedId = id;
     renderOverlay();
   };
   r.readAsDataURL(f);
@@ -157,8 +201,13 @@ document.getElementById('signInput').onchange = e => {
 // Load PDF
 pdfUpload.onchange = async e => {
   const file = e.target.files[0]; if (!file) return;
-  rawPdfBytes = await file.arrayBuffer();
-  pdfJsDoc = await pdfjsLib.getDocument({ data: rawPdfBytes.slice(0) }).promise;
+  try {
+    rawPdfBytes = await file.arrayBuffer();
+    pdfJsDoc = await pdfjsLib.getDocument({ data: rawPdfBytes.slice(0) }).promise;
+  } catch (err) {
+    alert('Could not open this PDF. It may be password protected or damaged.');
+    return;
+  }
   totalPages = pdfJsDoc.numPages;
   currentPage = 1; items = [];
   document.getElementById('uploadBox').classList.add('hidden');
@@ -169,11 +218,15 @@ pdfUpload.onchange = async e => {
 
 async function renderPage() {
   const page = await pdfJsDoc.getPage(currentPage);
+  const base = page.getViewport({ scale: 1 });
+  const avail = Math.max(280, window.innerWidth - 32);
+  scale = Math.min(1.4, avail / base.width);
   const viewport = page.getViewport({ scale });
   canvas.width = viewport.width;
   canvas.height = viewport.height;
-  document.getElementById('pageStage').style.width = viewport.width + 'px';
-  document.getElementById('pageStage').style.height = viewport.height + 'px';
+  pageDims[currentPage] = { w: viewport.width, h: viewport.height };
+  stage.style.width = viewport.width + 'px';
+  stage.style.height = viewport.height + 'px';
   document.getElementById('pageIndicator').textContent = `Page ${currentPage} / ${totalPages}`;
 
   await page.render({ canvasContext: ctx, viewport }).promise;
@@ -181,7 +234,7 @@ async function renderPage() {
   renderOverlay();
 }
 
-// Extract existing text positions from PDF so user can click & edit any word/line
+// Extract existing text positions so the user can click and edit any line
 async function extractClickableText(page, viewport) {
   detectLayer.innerHTML = '';
   detectedBlocks = [];
@@ -194,11 +247,11 @@ async function extractClickableText(page, viewport) {
     const width = item.width * scale;
     const x = tx[4];
     const y = tx[5] - fontHeight;
-
     const blockId = `p${currentPage}_t${idx}`;
-    detectedBlocks.push({ blockId, str: item.str, x, y, w: Math.max(width, 20), h: fontHeight * 1.18, fontSize: Math.round(fontHeight) });
 
-    // Skip if user already converted this block into an edited item
+    detectedBlocks.push({ blockId, str: item.str, x, y, w: Math.max(width, 20), h: fontHeight * 1.18 });
+
+    // Skip if the user already converted this block into an edited item
     if (items.some(it => it.sourceBlockId === blockId)) return;
 
     const box = document.createElement('div');
@@ -244,19 +297,12 @@ async function extractClickableText(page, viewport) {
 document.getElementById('prevPage').onclick = () => { if (currentPage > 1) { currentPage--; renderPage(); } };
 document.getElementById('nextPage').onclick = () => { if (currentPage < totalPages) { currentPage++; renderPage(); } };
 
-// Click empty space on PDF page to place new element
-overlay.addEventListener('mousedown', e => {
-  if (e.target !== overlay) return;
-  const rect = overlay.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-
-  // Check if user clicked on an underlying detected text block
-  const hit = detectedBlocks.find(b => x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h && !items.some(it => it.sourceBlockId === b.blockId));
-  if (hit && mode === 'text') {
-    const targetEl = [...detectLayer.children].find(el => el.title === 'Click to edit: ' + hit.str && Math.abs(parseFloat(el.style.left) - hit.x) < 2);
-    if (targetEl) { targetEl.click(); return; }
-  }
+// Click or tap empty space on the PDF page to place a new element
+stage.addEventListener('click', e => {
+  if (e.target.closest('.el-item') || e.target.closest('.pdf-detected')) return;
+  const rect = stage.getBoundingClientRect();
+  const x = e.clientX - rect.left - stage.clientLeft;
+  const y = e.clientY - rect.top - stage.clientTop;
 
   if (mode === 'text') {
     const id = Date.now();
@@ -274,16 +320,13 @@ overlay.addEventListener('mousedown', e => {
     }, 20);
   } else if (mode === 'whiteout' || mode === 'highlight') {
     const id = Date.now();
-    items.push({
-      id, page: currentPage, type: mode,
-      x, y, w: 140, h: 26
-    });
+    items.push({ id, page: currentPage, type: mode, x, y, w: 140, h: 26 });
     selectedId = id;
     renderOverlay();
   }
 });
 
-// Live update selected text size/color
+// Live update of selected text size / color
 document.getElementById('fontSize').oninput = e => {
   const it = items.find(i => i.id === selectedId && i.type === 'text');
   if (it) { it.size = Number(e.target.value) || 15; renderOverlay(); }
@@ -309,8 +352,8 @@ function renderOverlay() {
       span.textContent = it.text;
       span.style.fontSize = it.size + 'px';
       span.style.color = it.color;
-      span.oninput = () => { it.text = span.textContent; };
-      span.onfocus = () => { selectedId = it.id; };
+      span.oninput = () => { it.text = span.innerText; };
+      span.onfocus = () => select(it.id);
       wrap.appendChild(span);
     } else if (it.type === 'whiteout' || it.type === 'highlight') {
       wrap.classList.add(it.type === 'whiteout' ? 'el-whiteout' : 'el-highlight');
@@ -321,9 +364,17 @@ function renderOverlay() {
       wrap.classList.add('el-img');
       wrap.style.width = it.w + 'px';
       wrap.style.height = it.h + 'px';
-      wrap.innerHTML = `<img src="${it.dataUrl}" alt="Sign">`;
+      const img = document.createElement('img');
+      img.src = it.dataUrl;
+      img.alt = 'Signature or image';
+      wrap.appendChild(img);
       addResizer(wrap, it);
     }
+
+    const mv = document.createElement('div');
+    mv.className = 'move-handle';
+    mv.textContent = '✥';
+    wrap.appendChild(mv);
 
     const del = document.createElement('button');
     del.className = 'el-del';
@@ -340,10 +391,15 @@ function renderOverlay() {
   });
 }
 
+// Drag works with mouse and touch (pointer events)
 function makeDraggable(el, it) {
-  el.addEventListener('mousedown', e => {
-    if (e.target.classList.contains('resize-handle') || e.target.classList.contains('el-del')) return;
-    selectedId = it.id;
+  el.addEventListener('pointerdown', e => {
+    const t = e.target;
+    if (t.classList.contains('resize-handle') || t.classList.contains('el-del')) return;
+    const isHandle = t.classList.contains('move-handle');
+    if (!isHandle && t.closest('.el-text')) return; // let the user edit text normally
+    e.preventDefault();
+    select(it.id);
     const startX = e.clientX - it.x, startY = e.clientY - it.y;
     const move = ev => {
       it.x = Math.max(0, ev.clientX - startX);
@@ -351,16 +407,22 @@ function makeDraggable(el, it) {
       el.style.left = it.x + 'px';
       el.style.top = it.y + 'px';
     };
-    const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
-    window.addEventListener('mousemove', move);
-    window.addEventListener('mouseup', up);
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
   });
 }
 
 function addResizer(el, it) {
   const h = document.createElement('div');
   h.className = 'resize-handle';
-  h.onmousedown = e => {
+  h.addEventListener('pointerdown', e => {
+    e.preventDefault();
     e.stopPropagation();
     const startX = e.clientX, startY = e.clientY, origW = it.w, origH = it.h;
     const move = ev => {
@@ -369,10 +431,15 @@ function addResizer(el, it) {
       el.style.width = it.w + 'px';
       el.style.height = it.h + 'px';
     };
-    const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
-    window.addEventListener('mousemove', move);
-    window.addEventListener('mouseup', up);
-  };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+  });
   el.appendChild(h);
 }
 
@@ -381,9 +448,36 @@ function hexToRgb(hex) {
   return PDFLib.rgb(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255);
 }
 
-// Compile & Download Edited PDF
+// Standard PDF fonts only support Latin characters, so replace others with "?"
+function safeText(str) {
+  return Array.from(str).map(c => (c.charCodeAt(0) <= 255 ? c : '?')).join('');
+}
+
+// Convert any image (webp, gif, etc.) to PNG bytes so pdf-lib can embed it
+function imageToPngBytes(dataUrl) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement('canvas');
+      c.width = img.naturalWidth; c.height = img.naturalHeight;
+      c.getContext('2d').drawImage(img, 0, 0);
+      c.toBlob(b => b.arrayBuffer().then(resolve, reject), 'image/png');
+    };
+    img.onerror = reject;
+    img.src = dataUrl;
+  });
+}
+
+async function embedItemImage(pdfDoc, it) {
+  if (it.mime === 'image/png') return pdfDoc.embedPng(await (await fetch(it.dataUrl)).arrayBuffer());
+  if (it.mime === 'image/jpeg' || it.mime === 'image/jpg') return pdfDoc.embedJpg(await (await fetch(it.dataUrl)).arrayBuffer());
+  return pdfDoc.embedPng(await imageToPngBytes(it.dataUrl));
+}
+
+// Compile and download the edited PDF
 document.getElementById('applySaveBtn').onclick = async () => {
   const btn = document.getElementById('applySaveBtn');
+  const oldLabel = btn.innerHTML;
   btn.textContent = '⏳ Saving PDF...';
   try {
     const pdfDoc = await PDFLib.PDFDocument.load(rawPdfBytes);
@@ -392,11 +486,12 @@ document.getElementById('applySaveBtn').onclick = async () => {
     for (const it of items) {
       const page = pdfDoc.getPage(it.page - 1);
       const { width, height } = page.getSize();
-      const ratioX = width / canvas.width;
-      const ratioY = height / canvas.height;
+      const dims = pageDims[it.page] || { w: canvas.width, h: canvas.height };
+      const ratioX = width / dims.w;
+      const ratioY = height / dims.h;
 
       if (it.type === 'text') {
-        // If replacing existing PDF text, cover original text area with white box first
+        // Replacing existing PDF text: cover the original area with a white box first
         if (it.isReplacement) {
           page.drawRectangle({
             x: it.origX * ratioX,
@@ -408,12 +503,16 @@ document.getElementById('applySaveBtn').onclick = async () => {
         }
         const fontSizePdf = it.size * ratioY;
         if ((it.text || '').trim()) {
-          page.drawText(it.text, {
-            x: (it.x + 2) * ratioX,
-            y: height - ((it.y + it.size * 0.92) * ratioY),
-            size: fontSizePdf,
-            font,
-            color: hexToRgb(it.color || '#111827')
+          const lines = String(it.text).split('\n');
+          lines.forEach((line, i) => {
+            if (!line.trim()) return;
+            page.drawText(safeText(line), {
+              x: (it.x + 4.5) * ratioX,
+              y: height - ((it.y + 2.5 + it.size * 0.92 + i * it.size * 1.15) * ratioY),
+              size: fontSizePdf,
+              font,
+              color: hexToRgb(it.color || '#111827')
+            });
           });
         }
       } else if (it.type === 'whiteout') {
@@ -431,12 +530,11 @@ document.getElementById('applySaveBtn').onclick = async () => {
           width: it.w * ratioX,
           height: it.h * ratioY,
           color: PDFLib.rgb(0.98, 0.8, 0.08),
-          opacity: 0.4
+          opacity: 0.42
         });
       } else if (it.type === 'image') {
-        const imgBytes = await fetch(it.dataUrl).then(r => r.arrayBuffer());
-        const embedded = it.mime === 'image/png' ? await pdfDoc.embedPng(imgBytes) : await pdfDoc.embedJpg(imgBytes);
-        page.drawImage(embedded, {
+        const img = await embedItemImage(pdfDoc, it);
+        page.drawImage(img, {
           x: it.x * ratioX,
           y: height - ((it.y + it.h) * ratioY),
           width: it.w * ratioX,
@@ -445,43 +543,23 @@ document.getElementById('applySaveBtn').onclick = async () => {
       }
     }
 
-    const outBytes = await pdfDoc.save();
-    const blob = new Blob([outBytes], { type: 'application/pdf' });
+    const bytes = await pdfDoc.save();
+    const blob = new Blob([bytes], { type: 'application/pdf' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = 'edited-themaxtool.pdf'; a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 3000);
+    a.href = url;
+    a.download = 'edited.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
   } catch (err) {
-    alert('Error saving PDF: ' + err.message);
+    console.error(err);
+    alert('Could not save the PDF. Please try again, or check that the PDF is not password protected.');
+  } finally {
+    btn.innerHTML = oldLabel;
   }
-  btn.textContent = '✓ Apply Changes & Download PDF';
 };
-</script>
-  <section style="max-width:1040px;margin:28px auto;padding:22px;background:#ffffff;border:1px solid #e7eaf1;border-radius:18px;font-family:Inter,system-ui,sans-serif;color:#111827">
-  <h2 style="margin:0 0 10px;font-size:20px">All Free Online PDF Tools — Edit, Merge, Split &amp; Convert</h2>
-  <p style="margin:0 0 14px;color:#667085;font-size:14px">Edit text directly on any PDF, add signatures or whiteout, or use our instant browser-based PDF utilities with zero file uploads and no watermarks:</p>
-  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px">
-    <a href="/?tool=pdfmerge" style="padding:8px 14px;border-radius:10px;border:1px solid #e7eaf1;background:#f7f8fc;font-weight:600;font-size:13px;text-decoration:none;color:#111827">📎 Merge PDF</a>
-    <a href="/?tool=pdfsplit" style="padding:8px 14px;border-radius:10px;border:1px solid #e7eaf1;background:#f7f8fc;font-weight:600;font-size:13px;text-decoration:none;color:#111827">✂️ Split PDF</a>
-    <a href="/?tool=pdfrotate" style="padding:8px 14px;border-radius:10px;border:1px solid #e7eaf1;background:#f7f8fc;font-weight:600;font-size:13px;text-decoration:none;color:#111827">🔄 Rotate PDF</a>
-    <a href="/?tool=pdftojpg" style="padding:8px 14px;border-radius:10px;border:1px solid #e7eaf1;background:#f7f8fc;font-weight:600;font-size:13px;text-decoration:none;color:#111827">🖼️ PDF to JPG</a>
-    <a href="/?tool=imgtopdf" style="padding:8px 14px;border-radius:10px;border:1px solid #e7eaf1;background:#f7f8fc;font-weight:600;font-size:13px;text-decoration:none;color:#111827">📄 JPG / PNG to PDF</a>
-  </div>
-
-  <h3 style="margin:0 0 8px;font-size:17px">How to Edit a PDF Online Free Without Watermark</h3>
-  <ol style="margin:0 0 14px;padding-left:20px;color:#667085;font-size:14px;line-height:1.7">
-    <li><strong>Open Your PDF:</strong> Select any PDF document from your phone or computer — it loads instantly inside your browser.</li>
-    <li><strong>Click to Edit Text, Sign or Whiteout:</strong> Click on existing text to update it, add new text boxes, draw a signature, or cover old details cleanly.</li>
-    <li><strong>Download Clean PDF:</strong> Save your updated PDF immediately with zero watermarks and zero server uploads.</li>
-  </ol>
-
-  <p style="margin:0;padding-top:12px;border-top:1px solid #e7eaf1;color:#667085;font-size:12px">
-    <strong>100% Private &amp; Fair Use Notice:</strong> Your PDF files never leave your device. Use this editor strictly for your own personal, educational, or authorized business documents.
-  </p>
-</section>
-
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is TheMaxTool PDF Editor completely free without watermarks?","acceptedAnswer":{"@type":"Answer","text":"Yes, you can edit PDF text, add signatures, whiteout sections, and download unlimited pages completely free with no watermarks."}},{"@type":"Question","name":"Are my PDF documents uploaded to a server?","acceptedAnswer":{"@type":"Answer","text":"No. All PDF editing happens 100% locally inside your web browser for complete document privacy."}},{"@type":"Question","name":"Can I also merge, split, or convert PDF to JPG?","acceptedAnswer":{"@type":"Answer","text":"Yes, TheMaxTool includes dedicated free tools to merge PDFs, split pages, rotate PDFs, and convert between PDF and JPG."}}]}
 </script>
 </body>
 </html>
